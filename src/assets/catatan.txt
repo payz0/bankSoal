@@ -1,0 +1,6 @@
+
+6. penambahan soal jenis essay dan penentuan point
+10. chat super user dengan pengguna sebagai customer service 
+3. error type fullscreen == abaikan
+ganti tema warna saat login
+menu dropdown di admin

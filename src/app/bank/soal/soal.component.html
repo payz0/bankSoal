@@ -1,0 +1,241 @@
+<div class="container" >    
+    <div class="user ">
+        <div class="IsiSoal" style="padding: 0px 4px;">
+                <h3>Buat Soal    
+                    <ng-template #import>
+                        <input type="file" id="import" (change)="importExcel($event)" style="display: none">
+                        <label for="import" style="float: right;margin-top: -7px" class="tombol tombol-alert">Import Soal</label>
+                    </ng-template>
+                    <span  class="tombol tombol-danger"  style="float: right;margin-top: -7px" (click)="noteWarning = true" 
+                    *ngIf="Soal.jenjang == null || Soal.kelas == null || Soal.mapel == null || Soal.kelas == 'null' || Soal.mapel == 'null';else import">Import Soal</span>
+                    <a class="tombol tombol-alert" style="float: right;text-decoration: none;margin-top: -7px;" href="./assets/format_soal.xls">Download Format Soal</a>
+                </h3>
+            <!-- <hr> -->
+            <div style="line-height: 30px;background: #feffff33;padding: 10px;margin-bottom: 15px;border: 1px solid rgb(185, 185, 185);">
+                <table width="100%">
+                    <tr>
+                        <td>
+                            Jenjang
+                        </td>
+                         <td>
+                            Mata Pelajaran
+                        </td>
+                        <td>
+                            Kelas
+                        </td>
+                        
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="radio" name="sekolah" id="smp" class="listSekolah" value="smp" [(ngModel)]="Soal.jenjang">
+                            <label for="smp" class="labelSekolah">SMP/Sederajat</label>
+                            
+                            <input type="radio" name="sekolah" id="sma" class="listSekolah" value="sma" [(ngModel)]="Soal.jenjang">
+                            <label for="sma" class="labelSekolah">SMA/Sederajat</label>
+                            <span class="noted" *ngIf="noteWarning && Soal.jenjang == null ">Tentukan Jenjang dulu</span>
+                        </td>
+                        <!-- <td>:</td> -->
+                        <td>
+                            <!-- di ambil dari tabel database mapel -->
+                            <select [(ngModel)]="Soal.mapel">
+                                <option value='null' selected>- Pilih -</option>
+                                <option *ngFor="let id of listMapel" value="{{id}}">
+                                    <ng-container *ngFor ="let mapel of allMapel">
+                                        <span *ngIf="id == mapel._id">{{mapel.mapel}}</span>
+                                    </ng-container>
+                                </option>
+                            </select> 
+                            <span class="noted" *ngIf="noteWarning && Soal.mapel == null || Soal.mapel == 'null'">Tentukan Mapel dulu</span>           
+                        </td>
+                         <td>
+                            <select [(ngModel)]="Soal.kelas" >
+                                <option value='null' >- Pilih -</option>
+                                <ng-container *ngIf="Soal.jenjang == 'smp'" >
+                                    <option value="{{tingkat}}" *ngFor="let tingkat of kelas |slice:0:3 ">{{tingkat}}</option>
+                                </ng-container>
+                                <ng-container  *ngIf="Soal.jenjang == 'sma'">
+                                    <option value="{{tingkat}}" *ngFor="let tingkat of kelas |slice:3:6 ">{{tingkat}}</option>
+                                </ng-container>
+                            </select> 
+                            <span class="noted" *ngIf="noteWarning && Soal.kelas == null || Soal.kelas == 'null'">Tentukan Kelas dulu</span>                       
+                        </td>
+                    </tr>
+                    <!-- <tr>
+                        <td>
+                            Kelas
+                        </td>
+                        <td>:</td>
+                       
+                    </tr> -->
+                </table>
+            </div>
+            <!-- <hr> -->
+            <button class="tombol tombol-primary" (click)="gallery()" *ngIf="editorInstance" style="padding: 3px;"><i class="material-icons">insert_photo</i> <span style="position: relative;top: -7px;">Gallery</span>    </button>
+            <div (click)="toolbar(100)" *ngIf="!configEditor[100]" class="divSoal IsiSoal" data-text="Tulis Soal" [innerHtml]="Soal.isi"  contentEditable=true ></div>
+            <quill-editor [(ngModel)]="Soal.isi"  [modules]=""  *ngIf="configEditor[100]"  (focus)="toolbar(100)" (click)="toolbar(100)" (onEditorCreated)="setFocus($event)" trackChanges="all">
+            </quill-editor>
+
+            <div [ngClass]="configEditor[0] ? 'editorAktif':'editorNon'">
+                <input type="radio" class="opsiRadio" name="jawab" [(ngModel)]="Soal.jawaban" id="A" value="A" >
+                <label (click)="nonActive()" class="labelOpsi" for="A"><span>Jawaban A</span></label> <span class="correct">Benar</span>
+                <div (click)="toolbar(0)" *ngIf="!configEditor[0]" class="divSoal" data-text="Tulis Jawaban A" [innerHtml]="Soal.opsiA"  contentEditable=true></div>
+                <quill-editor [(ngModel)]="Soal.opsiA" [modules] = ""  (focus)="toolbar(0)" *ngIf="configEditor[0]" (onEditorCreated)="setFocus($event)" trackChanges="all"></quill-editor>
+            </div>
+            <div [ngClass]="configEditor[1] ? 'editorAktif':'editorNon'" >
+                <input type="radio" class="opsiRadio" name="jawab" [(ngModel)]="Soal.jawaban" id="B" value="B">
+                <label (click)="nonActive()" class="labelOpsi" for="B"><span>Jawaban B</span></label> <span class="correct">Benar</span>
+                <div (click)="toolbar(1)" *ngIf="!configEditor[1]" class="divSoal " data-text="Tulis Jawaban B" [innerHtml]="Soal.opsiB"  contentEditable=true></div>
+                <quill-editor [(ngModel)]="Soal.opsiB" [modules] = ""  *ngIf="configEditor[1]" (click)="toolbar(1)" (focus)="toolbar(1)" (onEditorCreated)="setFocus($event)" trackChanges="all"></quill-editor>
+            </div>
+            <div [ngClass]="configEditor[2] ? 'editorAktif':'editorNon'">
+                <input type="radio" class="opsiRadio" name="jawab" [(ngModel)]="Soal.jawaban" id="C" value="C">
+                <label (click)="nonActive()" class="labelOpsi" for="C"><span>Jawaban C</span></label> <span class="correct">Benar</span>
+                <div (click)="toolbar(2)" *ngIf="!configEditor[2]" class="divSoal" data-text="Tulis Jawaban C" [innerHtml]="Soal.opsiC"  contentEditable=true></div>
+                <quill-editor [(ngModel)]="Soal.opsiC" *ngIf="configEditor[2]" [modules] = "" (click)="toolbar(2)" (focus)="toolbar(2)" (onEditorCreated)="setFocus($event)" trackChanges="all"></quill-editor>
+            </div>
+            <div [ngClass]="configEditor[3] ? 'editorAktif':'editorNon'">
+                <input type="radio" class="opsiRadio" name="jawab" [(ngModel)]="Soal.jawaban" id="D" value="D">
+                <label (click)="nonActive()" class="labelOpsi" for="D"><span>Jawaban D</span></label><span class="correct">Benar</span>
+                <div (click)="toolbar(3)" *ngIf="!configEditor[3]" class="divSoal" data-text="Tulis  Jawaban D" [innerHtml]="Soal.opsiD"  contentEditable=true></div>
+                <quill-editor [(ngModel)]="Soal.opsiD" [modules] = ""  *ngIf="configEditor[3]" (click)="toolbar(3)" (focus)="toolbar(3)" (onEditorCreated)="setFocus($event)" trackChanges="all"></quill-editor>
+            </div>
+        
+            <br>
+            <button class="tombol tombol-primary" (click)="TambahSoal()" >
+                <span *ngIf="!tombolEdit">Simpan</span>
+                <span *ngIf="tombolEdit">Simpan Perubahan</span>
+            </button>
+            <button class="tombol tombol-secondary" (click)="batal(); noteWarning = false;editorInstance = null">Batal</button>
+            <!-- <ng-template #import>
+                <input type="file" id="import" (change)="importExcel($event)" style="display: none">
+                <label for="import" style="float: right;" class="tombol tombol-alert">Import Excel</label>
+            </ng-template>
+            <span  class="tombol tombol-danger"  style="float: right;" (click)="noteWarning = true" 
+            *ngIf="Soal.jenjang == null || Soal.kelas == null || Soal.mapel == null || Soal.kelas == 'null' || Soal.mapel == 'null';else import">Import Excel</span> -->
+        </div>
+    </div>
+    <div class="board" [ngStyle]="boardActive ? {'right': '0px'}:''">
+        <div class="judulSide tooltip" (click)="boardActive = !boardActive; pilihSoal.mapel = ''; pilihSoal.kelas = ''">Brankas soal</div>
+            
+            <div class="boardOpsi">
+                <label for="">  Mapel</label>
+                <select [(ngModel)]="pilihSoal.mapel">
+                        <option value="" selected>- Semua Mapel -</option>
+                        <option *ngFor="let id of listMapel" value="{{id}}">
+                            <ng-container *ngFor ="let mapel of allMapel">
+                                <span *ngIf="id == mapel._id">{{mapel.mapel}}</span>
+                            </ng-container>
+                        </option>
+                    </select> 
+
+                <label for="">Kelas</label>
+                <select [(ngModel)]="pilihSoal.kelas">
+                    <option value="" >- Semua kelas -</option>
+                    <option value="{{tingkat}}" *ngFor="let tingkat of kelas ">{{tingkat}}</option>
+                </select> 
+                <label for="" style="margin-top: 10px;">Cari Soal</label>
+                <input type="text" placeholder="Search" [(ngModel)]="pilihSoal.isi" style="padding: 7px;margin-top: 2px;">
+            </div>
+            <div class="boardSoal">
+            <ol style="list-style: none;margin-left: -30px;">
+                <li *ngFor="let x of allSoal|filterBy:pilihSoal ; let i = index"  class="listSoal" (click)="CeckSoal(x)">
+                    <p [innerHtml]="x.isi?.length < 100 ? x.isi : (x.isi | slice:0:50)+'...'" class="jok"></p>
+                  
+                    <span class="hapusSoal tooltip" (click)="HapusSoal(x)">
+                        <i class="material-icons" style="font-size:14pt;color:red">highlight_off</i>
+                        <span class="tooltiptext">Hapus Soal</span> 
+                    </span>
+
+                      <span (click)="Sharing(x)" class="hapusSoal tooltip">
+                        <i class="material-icons" style="font-size:14pt">public</i>
+                        <span class="tooltiptext">Share public</span> 
+                    </span>
+                    
+                </li>
+                <li *ngIf="(allSoal | filterBy:pilihSoal).length === 0" style="text-align: center;font-size: 15pt;color: grey;"><i>Soal tidak ada</i></li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+
+<!-- modal box -->
+<div class="latarBox" *ngIf="konfirmasi">
+        <div class="box">
+            <div class="bodyBox" style="background: white">
+                <div class="titleBox">
+                    <span *ngIf="!showGallery">Soal Import dari excel</span>
+                    <span *ngIf="showGallery">Galley Image</span>
+                    <span class="btn-close" (click)="konfirmasi = false; dataExcel = [];showGallery = false">&times;</span>
+                </div>
+                <div class="isiBox">
+                    <!-- list soal -->
+                    <div *ngIf="!showGallery">
+                            <ul style="list-style-type: decimal;" class="IsiSoal">
+                                <li *ngFor="let soal of dataExcel"class="soals">
+                                    <span [innerHtml]="soal.isi" style="text-align: justify"></span>
+                                    <hr>
+                                    <ul style="list-style-type: lower-alpha; line-height: 1" class="opsiList">
+                                        <li [innerHtml]="soal.opsiA" *ngIf="soal.opsiA != null" [ngStyle]="{'color':(soal.jawaban == 'A') ? 'red':''}"></li>
+                                        <li  *ngIf="soal.opsiA == null"><p>Tidak ada jawaban</p ></li>
+                                        <li [innerHtml]="soal.opsiB"*ngIf="soal.opsiB != null" [ngStyle]="{'color':(soal.jawaban == 'B') ? 'red':''}"></li>
+                                        <li  *ngIf="soal.opsiB == null"><p>Tidak ada jawaban</p></li>
+                                        <li [innerHtml]="soal.opsiC"*ngIf="soal.opsiC != null" [ngStyle]="{'color':(soal.jawaban == 'C') ? 'red':''}"></li>
+                                        <li  *ngIf="soal.opsiC == null"><p>Tidak ada jawaban</p></li>
+                                        <li [innerHtml]="soal.opsiD"*ngIf="soal.opsiD != null" [ngStyle]="{'color':(soal.jawaban == 'D') ? 'red':''}"></li>
+                                        <li  *ngIf="soal.opsiD == null"><p>Tidak ada jawaban</p></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        <button class="tombol tombol-danger" style="float:right;margin:20px 1px 20px 1px;" (click)="konfirmasi = false; dataExcel = []">Batal </button>
+                        <button class="tombol tombol-alert" style="float:right;margin:20px 1px 20px 1px;" (click)="simpanDataExcel()">Simpan </button>
+                    </div>
+                    <!-- gallery -->
+                    <div *ngIf="showGallery">
+                       <h3>Gallery</h3>
+                       <div class="galery">
+                           <!--<ul> -->
+                               <div *ngFor="let gambar of allImage">
+                                   <img [attr.src]="_datas.basePort+'gambar/'+gambar" alt="" (click)="insertImage(gambar)">
+                               </div>
+                           <!-- </ul> -->
+                       </div>
+                       <button class="tombol tombol-danger" style="float:right;margin:20px 1px 20px 1px;" (click)="konfirmasi = false;showGallery = false">Batal </button>
+                    </div>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- modal hapus -->
+    <ng-container *ngIf="peringatanHapus">
+            <div class="latarBox">
+              <div class="box" style="width: 25%; animation: box 200ms forwards">
+                  <div class="bodyBox" style="min-height: 120px;">
+                      <div class="titleBox" style="background: #a73a3a !important;">
+                          Peringatan !
+                          <span class="btn-close" (click)="peringatanHapus = false">&times;</span>
+                      </div>
+                      <div class="isiBox" style=" padding: 0px 20px;text-align: center">
+                            Yakin di  hapus
+                          <div style="text-align: center">
+                               
+                              <button class="tombol tombol-alert" (click)="peringatanHapus = false; yaHapus()" 
+                              style="padding: 5px 20px;
+                              font-size: 8pt;
+                              margin-top: 20px;">Ya</button>             
+                            <button class="tombol tombol-danger" (click)="peringatanHapus = false" 
+                            style="padding: 5px 20px;
+                            font-size: 8pt;
+                            margin-top: 20px;">
+                      
+                              <span>Batal</span>
+                            </button>  
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            </div>
+    </ng-container>

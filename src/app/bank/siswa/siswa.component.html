@@ -1,0 +1,129 @@
+<div class="container" *ngIf="_datas.dataGuru?.aktif == 'ya'; else nonaktif">
+    <div class="user">
+        <h3>Daftar Siswa
+            <a *ngIf="formDaftar" class="tombol tombol-alert" style="float: right;text-decoration: none;margin-top: -7px;" href="./assets/excel.xls">Download Format Siswa</a>
+            <input   type="file" id="import" (change)="importExcel($event)" style="display: none">
+            <label *ngIf="formDaftar" for="import" style="float: right;margin-top: -7px;" class="tombol tombol-danger">Import Siswa</label>
+            
+            <label *ngIf="!formDaftar" class="tombol tombol-primary"  style="float: right;margin-top: -7px;" (click)="formDaftar = true">Tambah Siswa Baru</label>
+        </h3>
+        <div *ngIf="formDaftar">
+            <input type="text" class="inputan" placeholder="Nama Siswa" [(ngModel)]='Siswa.Nama' #cekInput>
+            <input type="text" class="inputan" placeholder="NISN Siswa" [(ngModel)]='Siswa.Nisn'  #cekInput [disabled]="editData">
+            <input type="text" class="inputan" placeholder="NIPD Siswa" [(ngModel)]='Siswa.Nipd'  #cekInput>
+            <button (click)="tambahSiswa(Siswa)" class="tombol tombol-primary">
+            <span *ngIf="!editData">Tambah Siswa</span>
+            <span *ngIf="editData">Simpan Perubahan</span>
+            </button>
+            <button class="tombol tombol-danger" (click)="Siswa = {}; editData = false; formDaftar = false">Batal</button>
+
+        
+        </div>
+        <div class="divInput">
+            <input type="text" class="inputan" placeholder="Search" style="max-width:90%;margin-bottom:0px" [(ngModel)]="cariSiswa.Nama">
+            <select style="background-color: white" [(ngModel)]="cariSiswa.id_kelas">
+                <option value=''>-Semua Kelas-</option>
+                <option *ngFor="let kelas of allKelas" value="{{kelas._id}}">{{kelas.kelas}}</option>
+            </select>
+            <!-- <button class="tombol tombol-alert" style="margin-left:10px" (click)="konfirmasi = true; editBox = true">Tambah Kelas </button> -->
+        </div>
+        <div style="overflow: auto;" [ngStyle]="!formDaftar ? {'height':'690px'}:{'height': '485px'}">
+            <table>
+                    <tr >
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>NISN</th>
+                        <th>NIPD</th>
+                        <th>Kelas</th>
+                        <th width="7%" style="z-index: 2;">Action</th>
+                    </tr>
+                    <tr *ngFor = "let siswa of allSiswas  | filterBy : cariSiswa; let i = index" >
+                        <td style="width:10px; text-align:center;padding-left:0px;">{{i+1}} </td>
+                        <td>{{siswa.Nama}}</td>
+                        <td>{{siswa.Nisn}}</td>
+                        <td>{{siswa.Nipd}}</td>
+                        <td>
+                            <span *ngFor="let kelas of allKelas">
+                                <ng-container *ngIf="siswa.id_kelas == kelas._id">{{kelas.kelas}}</ng-container>
+                            </span>
+                        </td>
+                        <td style="text-align: center">
+                            <span class="tooltip" style="float: left;">
+                                <i class="material-icons" style="color:green; cursor: pointer;    font-size: 12pt;" (click)="edit(siswa);formDaftar = true">&#xe3c9;</i>
+                                <i class="tooltiptext">Edit Siswa</i>
+                            </span>
+                            <span class="tooltip">
+                                <i class="material-icons" style="color:red; cursor: pointer;    font-size: 12pt;" (click)="delete(siswa)">clear</i>
+                                <i class="tooltiptext">Hapus Siswa</i>    
+                            </span>
+                        </td>
+                    </tr>
+                    <tr *ngIf="(allSiswas |filterBy: cariSiswa).length === 0" style="text-align: center;color:grey;"><td colspan="6"><i> Tidak ada data</i></td></tr>
+            </table>
+        </div>
+    </div>
+</div> 
+
+<ng-template #nonaktif>
+    <div style="margin-top:100px;text-align: center;background: rgba(177, 183, 21, 0.3686274509803922);padding: 20px;">
+        <b>Maaf fitur ini belum tersedia</b> <br>
+        <i>{{_datas.dataGuru?.alasan}}</i>
+    </div>
+</ng-template>
+
+<!-- modal box -->
+<div class="latarBox" *ngIf="konfirmasi">
+    <div class="box">
+        <div class="bodyBox">
+            <div class="titleBox">
+                Daftar Siswa
+                <span class="btn-close" (click)="konfirmasi = false">&times;</span>
+            </div>
+            <div class="isiBox">
+                    <table>
+                            <tr>
+                                <th>No</th><th>Nama</th><th>NISN</th><th>NIPD</th>
+                            </tr>
+                            <tr *ngFor = "let siswa of dataExcel; let i = index">
+                                <td style="width:10px; text-align:center;padding-left:0px;">{{i+1}}</td>
+                                <td>{{siswa.Nama}}</td>
+                                <td>{{siswa.Nisn}}</td>
+                                <td>{{siswa.Nipd}}</td>
+                            </tr>
+                    </table>
+                <button class="tombol tombol-danger" style="float:right;margin:20px 1px 20px 1px;" (click)="konfirmasi = false; editData = false; Siswa={}">Batal </button>
+                <button class="tombol tombol-alert" style="float:right;margin:20px 1px 20px 1px;" (click)="simpanDataExcel()">Simpan </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal hapus -->
+<ng-container *ngIf="peringatanHapus">
+        <div class="latarBox">
+          <div class="box" style="width: 25%; animation: box 200ms forwards">
+              <div class="bodyBox" style="min-height: 120px;">
+                  <div class="titleBox" style="background: #a73a3a !important;">
+                      Peringatan !
+                      <span class="btn-close" (click)="peringatanHapus = false">&times;</span>
+                  </div>
+                  <div class="isiBox" style=" padding: 0px 20px;">
+                     Yakin hapus siswa bernama <b>{{Siswa.Nama}}</b>
+                      <div style="text-align: center">
+                          <button class="tombol tombol-alert" (click)="peringatanHapus = false; yaHapus()" 
+                          style="padding: 5px 20px;
+                          font-size: 8pt;
+                          margin-top: 20px;">Ya</button>             
+                        <button class="tombol tombol-danger" (click)="peringatanHapus = false" 
+                        style="padding: 5px 20px;
+                        font-size: 8pt;
+                        margin-top: 20px;">
+                  
+                          <span>Batal</span>
+                        </button>  
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+</ng-container>

@@ -1,0 +1,96 @@
+<header class="" *ngIf="_datas.router !='test' && _datas.router != 'home' && _datas.router != 'su'" > 
+  <span  *ngIf="_datas.id_guru">
+    <i class="material-icons" style="cursor:pointer; margin-left: -45px;margin-right: 20px;position: absolute;" (click)="showMenu = !showMenu; openMenu2 = false">reorder</i>
+  </span>
+  <span (click)="route('home')" style="cursor: pointer"> Aplikasi Bank Soal  </span> 
+
+  <div *ngIf="_datas.login" style=" position: fixed;z-index: 999999;right: 45px;top: 7px;cursor: pointer;" class="profil2" (click)="openMenu2 = !openMenu2">
+    <button class="tombol_menu_2">Menus</button>
+    <ul class="menu_2" [ngStyle]="{'display': openMenu2 ? 'block':'none'}">
+      <li (click)="route('forum')"><i class="material-icons">chrome_reader_mode</i> <span>  Forum Guru</span></li>
+      <li (click)="route('profil')"><i class="material-icons">perm_contact_calendar</i> <span>  Profil</span></li>
+      <li (click)="route('siswa')"><i class="material-icons">group_add</i> <span> Daftar Siswa</span></li>
+      <li (click)="route('kelas')"><i class="material-icons">group_work</i> <span>  Kelas dan Nilai</span></li>
+      <li (click)="route('soal')"><i class="material-icons">assignment</i> <span>Buat Soal</span></li>
+      <li (click)="route('list')"><i class="material-icons">public</i> <span> Kumpulan Soal</span></li>
+      <li (click)="route('folder')"><i class="material-icons">library_books</i> <span>  Soal Ujian</span></li>
+      <li (click)="route('rencana')"><i class="material-icons">settings</i> <span>  Config Ujian</span></li>
+      <li (click)="logout()"><i class="material-icons">settings_power</i> <span>  Logout</span></li>
+    </ul>
+   <img  [src]="_datas.dataGuru?.foto ? _datas.basePort+'profil/'+_datas.dataGuru?.foto : '/assets/images.png'" >
+  </div>
+</header>
+    <div class="apps"  >
+        <div class="sideBar" [ngStyle]="!showMenu ? {'margin-left': '-320px','opacity':'0'} : {'opaity':'1'}"  *ngIf="_datas.router !='test' && _datas.router != 'home'">
+            <div class="menuHead">
+              <span><i class="material-icons" style="position: absolute;cursor: pointer;left: 35px" (click)="showMenu = !showMenu">reorder</i></span>
+              <span (click)="route('home')" style="margin-left: 66px;font-weight: bold;font-size: 16pt;"> Aplikasi Bank Soal  </span>
+            </div>
+            <div class="profil">
+                <img  [src]="_datas.dataGuru?.foto ? _datas.basePort+'profil/'+_datas.dataGuru?.foto : '/assets/images.png'" alt="" style="width: 40px;border: 2px solid #b1aeae;height: 40px;border-radius: 50%;">
+                <i style="font-size: 16pt;position: relative;top: -15px;left: 30px;">{{_datas.dataGuru?.username}}</i>
+            </div>
+            <ul style="line-height: 3;list-style: none;margin-top: 20px;margin-left: -50px;" class="menus">
+                <li (click)="route('forum')"><i class="material-icons">chrome_reader_mode</i>Forum Guru</li>
+                <li (click)="route('profil')"><i class="material-icons">perm_contact_calendar</i>Profil</li>
+                <li (click)="route('siswa')"><i class="material-icons">group_add</i>Daftar Siswa</li>
+                <li (click)="route('kelas')"><i class="material-icons">group_work</i>Kelas dan Nilai</li>
+                <li (click)="route('soal')"><i class="material-icons">assignment</i>Buat Soal</li>
+                <li (click)="route('list')"><i class="material-icons">public</i>Kumpulan Soal</li>
+                <li (click)="route('folder')"><i class="material-icons">library_books</i>Soal Ujian</li>
+                <li (click)="route('rencana')"><i class="material-icons">settings</i>Config Ujian Online</li>
+                <li (click)="logout()"><i class="material-icons">settings_power</i>Logout</li>
+            </ul>
+        </div>
+        <div style="width: 100%;" >
+          <ng-container [ngSwitch]="_datas.router">
+            <app-forum *ngSwitchCase="'forum'"></app-forum>
+            <app-home *ngSwitchCase="'home'"></app-home>
+            <app-soal *ngSwitchCase="'soal'"></app-soal>
+            <app-siswa *ngSwitchCase="'siswa'"></app-siswa>
+            <app-kelas *ngSwitchCase="'kelas'"></app-kelas>
+            <app-profil *ngSwitchCase="'profil'"></app-profil>
+            <app-folder *ngSwitchCase="'folder'"></app-folder>
+            <app-list-soal *ngSwitchCase="'list'"></app-list-soal>
+            <app-rencana *ngSwitchCase="'rencana'"></app-rencana>
+            <app-test *ngSwitchCase="'test'"></app-test>
+            <app-su *ngSwitchCase="'su'"></app-su>
+          </ng-container>
+        </div>
+    </div>
+<!-- <router-outlet></router-outlet> -->
+
+
+<div class="testNotif">
+    <div *ngFor = "let x of _datas.notif" >        
+        <div [innerHtml]="x"></div>
+    </div>
+</div>
+<ng-container *ngIf="_datas.warning">
+    <div class="latarBox">
+      <div class="box" style="width: 25%; animation: box 200ms forwards">
+          <div class="bodyBox" style="min-height: 120px;">
+              <div class="titleBox" style="background: #a73a3a !important;">
+                  Peringatan !
+                  <span class="btn-close" (click)="_datas.warning = false">&times;</span>
+              </div>
+              <div class="isiBox" style=" padding: 0px 20px;">
+                  {{_datas.pesanWarning}}
+                  <div style="text-align: center">
+                  
+                    <button class="tombol tombol-danger" (click)="_datas.warning = false" 
+                    style="padding: 5px 20px;
+                    font-size: 8pt;
+                    margin-top: 20px;">
+                     Ok !
+                     
+                    </button>  
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+</ng-container>
+
+<!-- background sidebar menu -->
+<div class="bodyContent" [ngStyle]="showMenu ? {'display': 'block'}:{'display': 'none'}" (click)="showMenu = !showMenu"> <div>  

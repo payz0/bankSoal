@@ -1,0 +1,144 @@
+<div class="container" *ngIf="!konfirmasi && accAdmin">
+    <div class="user">
+        <div class="internet"><span [ngClass]="internet ? 'konek':'non-konek'"></span>
+            <span *ngIf="internet">Online</span>
+            <span *ngIf="!internet" style="color:black">Offline</span>
+        </div>
+        <div style="text-align: center;margin-top:-50px">
+            <div style="font-size: 25px;font-weight: 900; text-transform: uppercase">{{dataUjian.sekolah}}</div>
+            <div style="font-size: 25px;font-weight: 400;  text-transform: uppercase">{{dataUjian.kabupaten}}</div>
+            <div style=" text-transform: uppercase">{{dataUjian.provinsi}}</div>
+            <div>Alamat : {{dataUjian.alamat}}</div>
+        </div>
+        <hr>
+        <table width="100%">
+            <tr>
+                <td style="width: 115px;">Mata Pelajaran</td>
+                <td width="5px">:</td>
+                <td>{{dataUjian.study}} </td>
+                <td style="width: 40%"></td>
+                <td style="width: 80px;">Waktu</td>
+                <td width="5px">:</td>
+                <td>{{menit}} : {{detik}} menit</td>
+            </tr>
+            <tr>
+                <td>Guru</td>
+                <td>:</td>
+                <td style="text-transform: capitalize">{{dataUjian.guru}}</td>
+                <td></td>
+                <td>Peserta</td>
+                <td>:</td>
+                <td style="text-transform: capitalize">{{dataUjian.peserta}}</td>
+            </tr>
+        </table>
+        <div style="background: red;height: 4px;position: relative;top: 67px" [ngStyle]="style"></div>
+        <h3>Soal Ujian <span style="margin-left:200px;font-size: 12pt "> tejawab : {{jawaban.length}}</span>
+            <button class="tombol tombol-alert" (click)="selesai()" style="float: right;margin-top: -8px">Selesai</button>
+        </h3>
+        <!-- 735px -->
+        <div style="height: 70vh;overflow: auto">
+            <ol>
+                <li *ngFor="let soal of allSoal" class="listSoal IsiSoal">
+                    <p [innerHtml]="soal.isi"></p>
+                    <ol style="list-style-type: lower-alpha;line-height: 1.3;margin-left: -20px;">
+                        <li>
+                            <input type="radio" name="{{soal._id}}" id="A:{{soal._id}}" (change)="pilih($event)" #cekJawab  >
+                            <label for="A:{{soal._id}}">
+                                <p *ngIf="soal.opsiA == null">( kosong )</p>
+                                <p *ngIf="soal.opsiA !=null" [innerHtml]="soal.opsiA"></p>
+                            </label>
+                        </li>
+                        <li>
+                            <input type="radio" name="{{soal._id}}" id="B:{{soal._id}}" (change)="pilih($event)" #cekJawab>
+                            <label for="B:{{soal._id}}">
+                                <p *ngIf="soal.opsiB == null">( kosong )</p>
+                                <p *ngIf="soal.opsiB != null" [innerHtml]="soal.opsiB"></p>
+                            </label>
+                        </li>
+                        <li>
+                            <input type="radio" name="{{soal._id}}" id="C:{{soal._id}}" (change)="pilih($event)" #cekJawab>
+                            <label for="C:{{soal._id}}">
+                                <p *ngIf="soal.opsiC == null">( kosong )</p>
+                                <p *ngIf="soal.opsiC != null" [innerHtml]="soal.opsiC"></p>
+                            </label>
+                        </li>
+                        <li>
+                            <input type="radio" name="{{soal._id}}" id="D:{{soal._id}}" (change)="pilih($event)" #cekJawab >
+                            <label for="D:{{soal._id}}">
+                                <p *ngIf="soal.opsiD == null">( kosong )</p>
+                                <p *ngIf="soal.opsiD != null" [innerHtml]="soal.opsiD"></p>
+                            </label>
+                        </li>
+                    </ol>
+                </li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<!-- modal box -->
+<div class="latarBox" *ngIf="konfirmasi || !accAdmin">
+    <div class="box">
+        <div class="bodyBox">
+            <div class="titleBox">
+               Masuk Ujian {{dataUjian.study}} {{dataUjian.ujian}}
+            </div>
+            <div class="isiBox">
+                <ng-container *ngIf="!cekKode">
+                    <input type="text" class="inputan" [(ngModel)]="kodeUjian" placeholder="Masukkan kode ujian" (change)="cekKodeUjian()"  (keyup.enter)="konfirm()">
+                    <hr>
+                    <b>Ketentuan sebelum memulai ujian</b>
+                    <ol>
+                        <li>Masukkan kode ujian</li>
+                        <li>Jika ujian sudah mulai tidak boleh minimize atau buka tab atau buka browser lain, jika tidak maka peserta ujian di anggap sudah selesai ujian dengan jawaban yang seadanya</li>
+                        <li>Jika waktu sudah habis maka nilai akan di ambil dari soal yang sudah di jawab</li>
+                        <li>Jika soal sudah selesai jawab maka siswa bisa meneken tombol selesai</li>
+                        <li>Berprilakulah jujur dalam mengerjakan ujian</li>
+                        <!-- <li></li> -->
+                    </ol>
+                </ng-container>
+                <ng-container *ngIf="cekKode && konfirmasi">
+                 <select  class="inputan" [(ngModel)]="kelas.id_kelas">
+                    <option value="" selected>- Pilih kelas -</option>
+                    <option value="{{kelas._id}}" *ngFor="let kelas of allKelas">{{kelas.kelas}} </option>
+                </select>
+                <select  class="inputan" [(ngModel)]="siswa.nama">
+                    <option value="" selected>- Pilih Nama Peserta -</option>
+                    <option value="{{siswa._id}}" *ngFor="let siswa of allSiswa | filterBy:kelas">{{siswa.Nama}} </option>
+                </select>
+                <input type="text" placeholder="NISN" class="inputan" [(ngModel)]="siswa.nisn" (change)="CekNisn()" (keyup.enter)="konfirm()">
+                </ng-container>
+                <ng-container *ngIf="!accAdmin && !konfirmasi">
+                    <div style="text-align: center;margin-bottom: 45px;">
+                        <h2 style="margin-bottom: 4px">{{dataUjian.sekolah}}</h2>
+                        <i>{{dataUjian.alamat}}</i>
+                    </div>
+                        <table width="100%" style="margin-bottom: 70px;">
+                            <tr>
+                                <td>Guru</td>
+                                <td>:</td>
+                                <td>{{dataUjian.guru}}</td>
+                            </tr>
+                            <tr>
+                                <td>Mata Pelajaran</td>
+                                <td>:</td>
+                                <td>{{dataUjian.study}}</td>
+                            </tr>
+                            <tr>
+                                <td>Siswa</td>
+                                <td>:</td>
+                                <td>{{dataUjian.peserta}}</td>
+                            </tr>
+                        </table>
+                        <i style="color: red;font-size: 16pt;padding: 10px;" >Standby ...</i>
+                        <br>
+                        <!-- <button class="tombol tombol-danger" style="float:right;margin:20px 1px 20px 1px;" (click)="batal(); siswaKeluar(); konfirmasi = false">Keluar</button> -->
+                </ng-container>
+                <ng-container *ngIf="!tombol">
+                    <button class="tombol tombol-danger" style="float:right;margin:20px 1px 20px 1px;" (click)="batal(); konfirmasi = false">Batal </button>
+                    <button class="tombol tombol-alert" style="float:right;margin:20px 1px 20px 1px;" (click)="konfirm()">Masuk </button>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>

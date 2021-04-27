@@ -1,0 +1,58 @@
+.user img{
+    width: 33px;
+}
+.textFolder{
+    position: relative;
+    top: -6px;
+    left: 10px;
+}
+.detailSoal{
+    float: right;
+    position: relative;
+    top: 6px;
+    right: 111px;
+    font-size: 10pt;
+}
+.folder{
+    margin-bottom: 3px;
+    border-bottom: 1px dotted;
+    /* padding-bottom: 10px; */
+    list-style: none;
+    
+}
+
+.tombol-small{
+    font-size: 8pt !important;
+    padding: 5px !important;
+}
+
+ul{
+  margin-left:-35px;  
+}
+
+.buttonEdit span{
+    margin-left:10px;
+    cursor: pointer;
+}
+
+.buttonEdit span i{
+    font-size: 14pt;
+    color: #4c41d2;
+    margin-top: 10px;
+}
+
+.opsiList{
+    list-style-type: lower-alpha;
+    line-height: 1;
+    margin-left: -20px;
+}
+
+.opsiList li{
+    margin: -13px 0px;
+}
+.soals{
+    margin-bottom: 10px;
+    background: rgb(239, 239, 239);
+    padding: 1px 16px 15px;
+    border-radius: 7px;
+}

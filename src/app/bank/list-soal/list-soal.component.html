@@ -1,0 +1,135 @@
+<div class="container" *ngIf="_datas?.dataGuru?.aktif == 'ya' ; else nonaktif2 ">
+    <div class="user">
+        <h3>
+            Pilih Soal
+            
+            <span style="margin-left: 50px;padding: 8px;font-size: 11pt;
+            cursor: pointer; color:white" (click)="filterCmd = !filterCmd" [ngStyle]="{'background': filterCmd ? 'black':'rgb(32, 147, 169)'}">Filter Soal</span>
+            <input type="text" [(ngModel)]="selectSoal.isi" placeholder="Cari soal" class="searchSoal" (focus)="filterCmd = false">
+            <div class="filter" *ngIf="filterCmd">
+                <div class="jenjang">
+                    <input type="radio" name="data" id="privasi" value="owner" [(ngModel)]="posisi" >
+                    <label for="privasi" (click)="getSoal('pribadi')">Owner</label>
+                    <input type="radio" name="data" id="shared"  [checked]="true"  >
+                    <label for="shared" (click)="getSoal('global');posisi = 'global'">Global</label>
+                </div>
+                <div>
+                    <select [(ngModel)]="selectSoal.mapel" class="mapel" (change)="selectSoal.jenjang = ''">
+                        <option value="">- Semua Mapel -</option>
+                        <option value="{{id}}" *ngFor="let id of listMapel">
+                            <ng-container *ngFor="let mapel of allMapel">
+                                <span *ngIf="id === mapel._id">{{mapel.mapel}}</span>
+                            </ng-container>
+                        </option>
+                    </select>
+                </div>
+                <div class="jenjang">
+                    <input type="radio" name="jenjang" id="smp" value="smp" [(ngModel)]="selectSoal.jenjang">
+                    <label for="smp" (click)="selectSoal.kelas = null">SMP</label>
+                    <input type="radio" name="jenjang" id="sma" value="sma" [(ngModel)]="selectSoal.jenjang">
+                    <label for="sma" (click)="selectSoal.kelas = null">SMA</label>
+                </div>
+                <div class="kelas" *ngIf="selectSoal.jenjang != null">
+                    <ng-container *ngIf="selectSoal.jenjang == 'smp'">
+                        <span *ngFor="let clas of kelas | slice:0:3">
+                            <input type="radio" name="kelas" id="{{clas}}" value="{{clas}}" [(ngModel)]="selectSoal.kelas">
+                            <label for="{{clas}}">{{clas}}</label>
+                        </span>
+                    </ng-container>
+                    <ng-container *ngIf="selectSoal.jenjang == 'sma'">
+                        <span *ngFor="let clas of kelas | slice:3:6">
+                            <input type="radio" name="kelas" id="{{clas}}"  value="{{clas}}" [(ngModel)]="selectSoal.kelas">
+                            <label for="{{clas}}">{{clas}}</label>
+                        </span>
+                    </ng-container> 
+                </div>
+            </div>
+
+            <span *ngIf="collectSoal.length != 0">
+                <button class="tombol tombol-alert" (click)="konfirmasi = true" *ngIf="!_datas.statusService">
+                    simpan
+                </button>
+                <button class="tombol tombol-alert" (click)="simpan()"  *ngIf="_datas.statusService" >
+                    simpan perubahn
+                </button>
+                <button class="tombol tombol-danger" (click)="clearCekbox()" [ngStyle]="{'margin-right': _datas.statusService ? '128px':'63px'}">Clear</button>
+            </span>
+            <span style="    position: absolute;top: 17px;z-index: 99;right: 185px;">{{jumSoal}} Soal</span>
+        </h3>
+        <div class="IsiSoal">
+            <div *ngFor="let soal of allSoal | filterBy: selectSoal " class="listSoal">
+                <input type="checkbox"  id="{{soal._id}}" class="pilihSoal" (change)="groupSoal($event)" #cekbox>
+                <label  for="{{soal._id}}" class="labelSoal"><p [innerHtml]="soal.isi" ></p></label>
+                <!-- _jika grey background tidak jalan pakai ngClass di bawah ini
+                [ngClass]="(collectSoal.indexOf(soal._id) > -1) ? classLabel : ''"  -->
+                <span *ngFor="let num of collectSoal; let i = index" >
+                    <ng-container *ngIf="num == soal._id">
+                        <span class="noUrut">{{i+1}}</span>
+                    </ng-container>
+                </span>
+                    <ul>
+                        <li [ngStyle]="{'color': (soal.jawaban == 'A') ? 'red':'black'}">
+                            <p class="Opsi" [innerHtml]="soal.opsiA" *ngIf="soal.opsiA != null"></p>
+                            <p *ngIf="soal.opsiA == null">Tidak ada jawaban</p>
+                        </li>
+                        <li [ngStyle]="{'color': (soal.jawaban == 'B') ? 'red':'black'}">
+                            <p class="Opsi" [innerHtml]="soal.opsiB"  *ngIf="soal.opsiB != null"></p>
+                            <p *ngIf="soal.opsiB == null">Tidak ada jawaban</p>
+                        </li>
+                        <li [ngStyle]="{'color': (soal.jawaban == 'C') ? 'red':'black'}">
+                            <p class="Opsi" [innerHtml]="soal.opsiC"  *ngIf="soal.opsiC != null"></p>
+                            <p *ngIf="soal.opsiC == null">Tidak ada jawaban</p>
+                        </li>
+                        <li [ngStyle]="{'color': (soal.jawaban == 'D') ? 'red':'black'}">
+                            <p class="Opsi" [innerHtml]="soal.opsiD"  *ngIf="soal.opsiD != null"></p>
+                            <p *ngIf="soal.opsiD == null">Tidak ada jawaban</p>
+                        </li>
+                    </ul>
+                    <i style="display: flex;height: 20px; flex-direction: row-reverse;">
+                          <span class="tooltip" *ngIf="posisi != 'owner'">
+                            <i class="material-icons" (click)="duplicate(soal)" style="cursor: pointer; color:green">cloud_download</i> 
+                            <i class="tooltiptext">Copy ke owner</i> 
+                        </span>
+                        <ng-container *ngFor="let map of allMapel">
+                            <span *ngIf="map._id === soal.mapel" class="footerSoal tooltip"  
+                            (click)="selectSoal.kelas = soal.kelas;selectSoal.mapel = soal.mapel ">{{map.mapel}} : {{soal.kelas}}
+                                <i class="tooltiptext">{{map.mapel}}</i>
+                            </span>
+                        </ng-container>
+                       <span class="footerSoal tooltip" (click)="soalBy(soal.id_guru)"  *ngIf="posisi != 'owner'">
+                           <i class="material-icons" style="font-size: 11pt;left: 4px;position: absolute;">person</i> {{soal.createdBy}} 
+                           <i class="tooltiptext">{{soal.createdBy}}</i> 
+                        </span>
+                    </i>
+            </div>
+            <span *ngIf="(allSoal |filterBy: selectSoal).length === 0" class="not">Soal belum ada yang sharing</span>
+        </div>
+    </div>
+</div>
+
+<ng-template #nonaktif2>
+    <div style="margin-top:100px;text-align: center;background: rgba(177, 183, 21, 0.3686274509803922);padding: 20px;">
+        <b>Maaf fitur ini belum tersedia</b> <br>
+        <i>{{_datas?.dataGuru?.alasan}}</i>
+    </div>
+</ng-template>
+
+<!-- modal box -->
+<div class="latarBox" *ngIf="konfirmasi">
+        <div class="box">
+            <div class="bodyBox">
+                <div class="titleBox">
+                    Informasi
+                    <span class="btn-close" (click)="konfirmasi = false">&times;</span>
+                </div>
+                <div class="isiBox">
+                    <span> Nama soal</span>
+                    <input type="text" placeholder="Nama Soal" class="inputan" [(ngModel)]="group.namaGroup"  (keyup.enter)="simpan()">
+                    <button class="tombol tombol-alert" style="float:right;margin:20px;" (click)="simpan()">
+                        <span *ngIf="!_datas.statusService">Simpan</span>
+                        <span *ngIf="_datas.statusService">Simpan Perubahan</span>   
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>

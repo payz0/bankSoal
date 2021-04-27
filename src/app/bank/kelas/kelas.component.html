@@ -1,0 +1,173 @@
+<div class="container" *ngIf="_datas.dataGuru?.aktif == 'ya'; else nonaktif2">
+    <div class="user">
+        <h3>
+            Daftar Kelas dan Nilai
+            <button class="tombol tombol-alert"  style="float: right;margin-top: -7px;" (click)="modalKelas()">Tambah Kelas</button>
+        </h3>
+        <div class="isiKelas">
+            <div class="sideLeft">
+                <span style="background: rgb(59, 110, 150);display: block;padding: 4px;color: white;">Daftar Kelas</span>    
+                <ul style="list-style: none;margin-left: -30px;text-transform: uppercase">
+                    <li *ngFor = "let kelas of semuaKelas" class="folder" (click)="pilihKelas(kelas); pindahKelas = false; " [ngClass]="folderId._id == kelas._id  ? 'folderSelect':''">
+                        <img src="./assets/folder.jpg" style="width: 25px; margin-right: 15px;">
+                        <span *ngIf="folderId._id != kelas._id || !editNamaKelas"> {{kelas.kelas}}</span>
+                        <input type="text" [(ngModel)]="kelas.kelas" *ngIf="editNamaKelas && folderId._id == kelas._id" (keyup.enter)="rubahKelas(kelas)" style="width: 60%;border: 0px;font-size: 11pt;">
+                        <i *ngIf="folderId._id == kelas._id" class="material-icons" style="float:right;font-size: 15pt;color: green;" (click)="editKelas()">edit</i>
+                    </li>
+                    <li (click)="tanpaKelas()" style="background: rgb(210, 210, 210);color: grey;">
+                        <img src="./assets/folder.jpg" style="width: 25px; margin-right: 15px;">
+                        <span>Blank</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="sideRight">
+                <b style="text-transform: uppercase"> 
+                    <span *ngIf="folderId._id != null">Siswa {{folderId.kelas}}</span> 
+                    <span *ngIf="folderId._id == null">Belum ada kelas</span> 
+                    (  {{semuaSiswa.length}} Siswa  )
+                </b>
+                
+                <button class="tombol tombol-danger" style="float:right" *ngIf="folderId._id != null && num.length === 0" (click)="hapusKelas(folderId._id)">Hapus Kelas</button>
+                <button class="tombol tombol-alert" style="float:right" (click)="pindahKelas = !pindahKelas" *ngIf="num.length > 0">Pindah Kelas</button>
+                <ul style="list-style: none; right:80px;position: absolute;z-index:99999;text-transform: uppercase" *ngIf="pindahKelas">
+                    <ng-container  *ngFor="let kelas of semuaKelas">
+                        <li class="tombol" style="background: rgb(187, 236, 190);color: black;" (click)="gotoKelas(kelas)"> {{kelas.kelas}}</li>
+                    </ng-container>
+                </ul>
+                <hr>
+                <table id="getExcel"> 
+                        <tr>
+                            <th rowspan="2">No</th><th rowspan="2">Nama</th>
+                            <th *ngIf="hidden" [attr.colspan]="(folderId.ujian | filterBy: cariNilai)?.length">Nilai {{onlyMapel}} [{{folderId.kelas}}]</th> <!-- untuk download excel aja -->
+                            <th  *ngIf="!hidden" [attr.colspan]="(folderId.ujian | filterBy: cariNilai)?.length"> Nilai
+                                <select class="listMapel" [(ngModel)]="cariNilai.id_mapel" (change)="mapelChange()">
+                                    <option value="{{id}}" *ngFor="let id of listMapel" >
+                                        <ng-container *ngFor="let mapel of semuaMapel">
+                                            <span *ngIf="id === mapel._id" [attr.id]="mapel.mapel" >{{mapel.mapel}}</span>
+                                        </ng-container>
+                                    </option>
+                                </select>
+                            </th>
+                            
+                        </tr>
+                        <tr>
+                            <th *ngFor="let nilai of folderId.ujian | filterBy:cariNilai">
+                                <span>{{nilai.nameUjian}} </span>
+                                <i style="display: list-item;font-size: 9pt;" *ngIf="!hidden">({{nilai.tgl | date:'d/M/yyyy'}})</i>
+                            </th>
+                            <th *ngIf="(folderId.ujian | filterBy: cariNilai)?.length === 0">(kosong)</th>
+                        </tr>
+                        <tr *ngFor = "let siswa of semuaSiswa ; let i = index" (click)="adds(siswa._id)"  [ngClass]="num.indexOf(siswa._id) < 0  ? '':'selected'">
+                                <td style="width:10px; text-align:center;padding-left:0px;" >{{i+1}}</td>
+                                <td style="text-transform: capitalize;">{{siswa.Nama}}</td>
+                                <ng-container *ngFor="let nilai of folderId.ujian | filterBy:cariNilai ">
+                                    <ng-container  *ngFor="let siswaNilai of siswa.ujian |filterBy : cariNilai ;let i = index">
+                                         <!-- <td *ngIf="siswaNilai.id_ujian !== nilai.id_ujian">
+                                                {{nilai.id_ujian}}
+                                             oo
+                                         </td> -->
+                                        <td *ngIf="siswaNilai.id_ujian === nilai.id_ujian">
+                                            <span >
+                                                {{siswaNilai.nilai | number:'1.0-1'}}
+                                                <i style="float: right;
+                                                    background: rgb(128, 78, 78);
+                                                    padding: 1px 3px;
+                                                    margin-right: 5px;
+                                                    font-size: 9pt;
+                                                    border-radius: 12px;
+                                                    color: white;" *ngIf="(siswaNilai.tgl|date:'d/M/yyyy') != (nilai.tgl|date:'d/M/yyyy')" >
+                                                    <span *ngIf="!hidden">Re</span>    
+                                                </i>
+                                            </span>
+                                          
+                                        </td>
+                                        <!-- <ng-template #nil><td>{{nilai.id_ujian}}  0</td></ng-template> -->
+                                        <td *ngIf="NilaiKosong(siswa.ujian,nilai.id_ujian) && siswa.ujian?.length === i+1"> 0</td>
+                                    </ng-container>
+                                    <td *ngIf="(siswa.ujian | filterBy: cariNilai)?.length === 0 || siswa.ujian?.length === 0">0</td>
+                                </ng-container>
+                                <td *ngIf="(folderId.ujian | filterBy: cariNilai)?.length === 0"></td>
+                                <td *ngIf="folderId._id == null"></td>
+                                <!-- <td>{{siswa.Nipd}}</td> -->
+                        </tr>
+                        <tr *ngIf="semuaSiswa.length === 0" style="text-align: center;color:grey;"><td colspan="3"><i> Tidak ada data</i></td></tr>
+                </table>
+                <button class="tombol tombol-primary" (click)="exportExcel()" *ngIf="folderId._id != null">Download Excel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #nonaktif2>
+    <div style="margin-top:100px;text-align: center;background: rgba(177, 183, 21, 0.3686274509803922);padding: 20px;">
+        <b>Maaf fitur ini belum tersedia</b> <br>
+        <i>{{_datas.dataGuru?.alasan}}</i>
+    </div>
+</ng-template>
+
+<!-- modal box -->
+<div class="latarBox" *ngIf="konfirmasi">
+        <div class="box">
+            <div class="bodyBox">
+                <div class="titleBox">
+                    Tambah Kelas
+                    <span class="btn-close" (click)="konfirmasi = false">&times;</span>
+                </div>
+                <div class="isiBox">
+                    <label>Kelas</label>
+                    <input type="text" class="inputan" [(ngModel)]="kelas.kelas" placeholder="Nama kelas">
+                    <b>Pilih Siswa</b>
+                    <table class="daftar">
+                            <tr>
+                                <th>No</th>
+                                <th style="cursor: pointer;"  (click)="selectAll()">
+                                    Nama</th>
+                                <th>NISN</th>
+                                <th>NIPD</th>
+                            </tr>
+                            <tr *ngFor = "let siswa of semuaSiswa ; let i = index"  [ngClass]="num.indexOf(siswa._id) < 0  ? '':'selected'">
+                                    <td style="width:10px; text-align:center;padding-left:0px;" (click)="adds(siswa._id)">{{i+1}}</td>
+                                    <td (click)="adds(siswa._id)" style="text-transform: capitalize;">{{siswa.Nama}}</td>
+                                    <td (click)="adds(siswa._id)">{{siswa.Nisn}}</td>
+                                    <td (click)="adds(siswa._id)">{{siswa.Nipd}}</td>
+                            </tr>
+                            <tr *ngIf="semuaSiswa.length === 0" style="text-align: center;color:grey;"><td colspan="4"><i> Tidak ada siswa</i></td></tr>
+                    </table>
+
+                    <button class="tombol tombol-danger" style="float:right;margin:20px 1px 20px 1px;" (click)="konfirmasi = false;num = [];folderId={}">Batal </button>
+                    <button *ngIf="semuaSiswa.length != 0" class="tombol tombol-alert" style="float:right;margin:20px 1px 20px 1px;" (click)="tambahKelas()">Simpan </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal hapus -->
+<ng-container *ngIf="peringatanHapus">
+        <div class="latarBox">
+          <div class="box" style="width: 25%; animation: box 200ms forwards">
+              <div class="bodyBox" style="min-height: 120px;">
+                  <div class="titleBox" style="background: #a73a3a !important;">
+                      Peringatan !
+                      <span class="btn-close" (click)="peringatanHapus = false">&times;</span>
+                  </div>
+                  <div class="isiBox" style=" padding: 0px 20px;text-align: center">
+                        Yakin di  hapus
+                      <div style="text-align: center">
+                           
+                          <button class="tombol tombol-alert" (click)="peringatanHapus = false; yaHapus()" 
+                          style="padding: 5px 20px;
+                          font-size: 8pt;
+                          margin-top: 20px;">Ya</button>             
+                        <button class="tombol tombol-danger" (click)="peringatanHapus = false" 
+                        style="padding: 5px 20px;
+                        font-size: 8pt;
+                        margin-top: 20px;">
+                  
+                          <span>Batal</span>
+                        </button>  
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+</ng-container>

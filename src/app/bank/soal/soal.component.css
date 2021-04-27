@@ -1,0 +1,220 @@
+.hapusSoal{
+    padding: 2px 13px;
+    cursor: pointer;
+    float: right;
+    /* margin-top: -20px; */
+    margin-top: -22px;
+    line-height: 1;
+}
+
+.galery{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 0fr));
+    grid-gap: .2em;
+    background: rgb(191, 191, 191);
+    padding: 5px;
+}
+
+.galery div{
+    background: white;
+    padding: 3px;
+}
+
+.galery img{
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.hapusSoal i{
+    margin-right: -20px;
+}
+select{
+    padding: 8px;
+    font-size: 11pt;
+    background-color: rgb(80, 97, 125);
+    color: white;
+}
+.divSoal{
+    padding: 10px;
+    background-color: rgba(236, 236, 236, 0.48);
+    margin-top: 7px;
+    border: 1px solid #8080806b;
+    color: #989898;
+    cursor: text;
+}
+.opsi{
+    display: inline-grid;
+    width: 99%;
+}
+.listSoal{
+    border-bottom: 1px solid rgba(128, 128, 128, 0.3411764705882353);
+    /* padding: 3px; */
+    cursor: pointer;
+    color: rgb(0, 0, 130);
+    line-height: 0;
+    transition: all 300ms;
+    border: 1px solid white;
+    border-bottom: 1px dotted;
+}
+
+.listSoal:hover{
+    background: rgba(243, 243, 243, 0.9019607843137255);
+   
+}
+.board{
+    position: fixed;
+    right: -414px;
+    top: 0px;
+    z-index: 999;
+    transition: all 400ms;
+}
+
+
+.opsiList{
+    list-style-type: lower-alpha;
+    line-height: 1;
+    margin-left: -20px;
+}
+
+
+.soals{
+    margin-bottom: 10px;
+    /* background: rgb(239, 239, 239); */
+    padding: 10px;
+    /* border-radius: 7px; */
+}
+
+.boardOpsi{
+    display: grid;
+    grid-template-columns: 20% auto;
+    z-index: 999991;
+    position: relative;
+    left: 0px;
+    background: rgb(228, 230, 230);
+    padding: 20px;
+    top: 94px;
+    width: 390px;
+}
+.boardSoal{
+    margin-top: 90px;
+    background: rgb(251, 251, 251);
+    padding: 25px 15px;
+    right: 0px;
+    min-width: 400px;
+    box-shadow: 1px 3px 6px 0px black;
+    height: 620px;
+    overflow: auto;
+    /* z-index: 99999; */
+}
+.judulSide{
+    cursor: pointer;
+    transform: rotate(270deg);
+    top: 253px;
+    position: absolute;
+    right: 261px;
+    background: rgb(67, 60, 113);
+    padding: 5px 110px;
+    width: -webkit-max-content;
+    width: -moz-max-content;
+    width: max-content;
+    z-index: 999999;
+    border-radius: 10px 10px 0px 0px;
+    box-shadow: -1px -5px 5px -1px #0000008c;
+    color: white;
+    font-size: 11pt;
+    font-weight: 1000;
+    text-transform: uppercase;
+}
+.editorAktif{
+    /* box-shadow: 0px 0px 15px 4px black !important; */
+    padding: 5px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    transition: all 500ms;
+}
+.editorNon{
+    margin-top:20px;
+}
+.labelOpsi{
+    /* background: rgba(162, 186, 193, 0.2); */
+    padding: 5px;
+    /* border-radius: 3px; */
+    color: black;
+    border: 1px solid #80808073;
+    font-size: 11pt;
+    cursor: pointer;
+    position: relative;
+    top:-7px;
+    transition: all 300ms;
+}
+.opsiRadio[type="radio"]{
+    display: none;
+}
+
+input:checked + .labelOpsi{
+    background:rgb(22, 121, 80);
+    color: white;
+}
+input:checked ~ .correct{
+    display: initial;
+}
+.correct{
+    display: none;
+    background: rgb(92, 187, 191);
+    margin-left: -2px;
+    padding: 6px 10px;
+    color: rgb(255, 255, 255);
+    font-size: 11pt;
+    position: relative;
+    top: -7px;
+    transition: all 300ms;
+}
+.listSekolah[type="radio"]{
+    display: none;
+}
+.listSekolah:checked + .labelSekolah{
+    
+    background: #50617d;
+    padding: 8px;
+    color: white;
+    box-shadow: 3px 2px 3px -1px black;
+}
+.labelSekolah{
+    margin-right: 15px;
+    cursor: pointer;
+    color: #a7a3a3;
+    border: 1px solid rgba(128, 128, 128, 0.44);
+    padding: 7px;
+    transition: all 400ms;
+}
+
+.noted{
+    background: rgb(45, 220, 135);
+    padding: 0px 12px;
+    border-radius: 18px;
+    /* box-shadow: 1px 1px 4px 0px black; */
+    color: rgb(224, 0, 0);
+    margin-left: 40px;
+    /* -webkit-animation: note 600ms forwards; */
+    animation: note 600ms forwards;
+    position: absolute;
+}
+.noted::before{
+    content: "";
+    width: 29px;
+    height: 22px;
+    background: #2ddc87;
+    position: absolute;
+    transform: translateX(-16px) rotateZ(22deg) rotateX(61deg) translateY(27px);
+    z-index: 1;
+    border-radius: 28px 1px 21px 1px;
+}
+
+@keyframes note{
+    0%{transform: translateX(-16px);opacity: 0;}
+    30%{transform: translateX(-26px)}
+    60%{transform: translateX(-16px)}
+    80%{transform: translateX(-20px)}
+    100%{transform: translateX(-16px);opacity: 1;}
+}

@@ -1,0 +1,45 @@
+
+table {
+    width: 100%;
+    /* border: 1px solid grey; */
+}
+th{
+    font-weight: bold;
+    background: rgb(83, 87, 101);
+    color: white;
+    text-align: center;
+    padding: 10px;
+    border: 1px solid white;
+    position: sticky;
+    top:0px;
+}
+
+.isiBox th{
+    top: -20px !important;
+}
+
+td{
+    padding-left: 15px;
+    min-width: max-content;
+    /* border: 1px solid grey; */
+}
+table, tr, td{
+    border: 1px solid grey;
+    border-collapse: collapse;
+}
+
+/* tr td{
+    cursor: pointer;
+} */
+
+.divInput{
+    background: rgba(117, 117, 150, 0.12);
+    padding: 10px;
+    display: grid;
+    grid-template-columns: auto auto;
+    margin-top: 35px
+}
+
+.tombol{
+    width: max-content;
+}

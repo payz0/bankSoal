@@ -1,0 +1,81 @@
+.isiKelas{
+    display: grid;
+    grid-template-columns: 25% auto;
+  
+}
+.sideLeft{
+    /* background: rgba(204, 204, 174, 0.21); */
+    padding: 10px;
+}
+.sideRight{
+    /* background: white; */
+    padding: 10px;
+    height: 665px;
+    overflow: auto;
+}
+
+table {
+    width: 100%;
+    /* border: 1px solid grey; */
+}
+th{
+    font-weight: bold;
+    background: rgb(83, 87, 101);
+    color: white;
+    text-align: center;
+    padding: 10px;
+    border: 1px solid white;
+    position: sticky;
+    top:0px;
+}
+
+td{
+    padding-left: 15px;
+    min-width: max-content;
+    /* border: 1px solid grey; */
+}
+table, tr, td{
+    border: 1px solid grey;
+    border-collapse: collapse;
+}
+
+.daftar tr td{
+    cursor: pointer;
+}
+
+.isiBox th{
+    top: -20px !important;
+}
+.folder{
+    transition: all 300ms;
+}
+.folder:hover{
+    /* background: white; */
+    background: rgba(41, 41, 41, 0.12156862745098039);
+}
+
+.selected{
+    background: rgba(100, 107, 104, 0.37);
+    transition: all 500ms;
+}
+
+.folderSelect{
+    /* background: white; */
+    background: rgba(41, 41, 41, 0.12156862745098039);
+}
+
+.cek{
+    display: none;
+}
+
+.sideLeft li{
+    cursor: pointer;
+    border-bottom: 1px dotted #757575;
+}
+
+.listMapel{
+    width: 100%;
+    padding: 5px;
+    background: rgb(83, 87, 101);
+    color: white;
+}

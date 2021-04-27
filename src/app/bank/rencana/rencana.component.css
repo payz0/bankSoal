@@ -1,0 +1,78 @@
+.listGroup{
+    width: 175px;
+    min-height: 70px;
+    background: rgb(241, 242, 243);
+    margin: 3px;
+    padding: 20px;
+    color: black;
+    list-style: none;
+    box-shadow: 1px 2px 5px -1px rgb(70, 70, 70);
+    text-align: center;
+    font-size: 14pt;
+    cursor: pointer;
+    place-self: flex-end;
+    transition: all 300ms;
+}
+.ulGroup{
+    display: flex;
+    flex-flow: wrap;
+    /* position: absolute;
+    left: 15px; */
+    width: 93%;
+}
+
+.listGroup:hover{
+    background: rgb(226, 226, 226);
+    box-shadow: 0px 0px 4px -1px rgb(70, 70, 70);
+}
+.tombolMenu{
+    text-align: center;
+    position: relative;
+    top: 20px;
+    background: rgb(182, 225, 228);
+    padding-top: 12px;
+    box-shadow: 0px -4px 7px -4px #000000;
+}
+.tombolMenu span{
+    margin:0px 5px;
+}
+
+.tombolMenu span i{
+    font-size: 14pt;
+}
+
+.listPeserta{
+    background: rgba(255, 255, 255, 0.5294117647058824);
+    width: fit-content;
+    padding: 0px 25px 0px 10px;
+}
+
+.preview li:hover{
+    background: rgb(232, 232, 232);
+}
+
+.preview li{
+    display: grid;
+    grid-template-columns: 60% 20% auto 5%;
+    border-bottom:1px dotted grey;
+    transition: all 300ms;
+}
+.used{
+    position: absolute;
+    margin-left: 54px;
+    margin-top: -21px;
+    font-size: 10pt;
+    background: rgba(255, 0, 0, 0.43);
+    padding: 2px 7px;
+    color: white;
+}
+
+.new{
+    position: absolute;
+    margin-left: 64px;
+    margin-top: -21px;
+    font-size: 11pt;
+    background: rgb(59, 146, 51);
+    padding: 2px 7px;
+    color: white;
+}

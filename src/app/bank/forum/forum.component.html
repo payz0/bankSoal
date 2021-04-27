@@ -1,0 +1,90 @@
+
+    <div class="container">
+        <div class="user">
+            <h3>Forum
+                <span>
+                    <ng-container *ngFor="let mapel of id_mapel_user">
+                        <ng-container *ngFor="let data of listMapel"> {{jumPost(data)}}
+                             <a *ngIf="mapel == data._id" href="#" (click)="linkGroup(data)" 
+                            [ngStyle]="(mapel == data._id && posting.id_mapel == mapel) ? {'background':'rgb(133, 198, 232)'}:''">{{data.mapel}}</a>
+                        </ng-container>
+                        <span class="numNotif" *ngIf="jumPosting[mapel] > 0 && jumPosting[mapel] < 10"> {{jumPosting[mapel]}}</span>
+                        <span class="numNotif" *ngIf="jumPosting[mapel] >= 10" style="margin-left: -30px"> +9</span>
+                    </ng-container>
+                    
+                </span>
+            </h3>
+            <div class="contentPosting">
+                <div class="topPosting">
+                    <quill-editor [(ngModel)]="posting.posting" class= "quillStyle" [modules]= "{ toolbar: false }" placeholder="Mulai diskusi" ></quill-editor>
+                    <button class="tombol tombol-alert" style="float:right;" (click)="addPosting(); post_id = 'd1010'">Posting</button>
+                </div>
+                <!-- isi postingan -->
+                <div >
+                    <div  class="boxPost" *ngFor="let posting of listPosting | filterBy:kategoriPosting"  [ngClass]="(addPost && post_id == posting._id) ? 'delPost':'addPost'">
+                        {{objectUser(posting)}}{{JumKomentar(posting._id)}}
+                        <div >
+                            <span class="tooltip" style="float: right">
+                                <i class="material-icons close" (click)="hapusPost('Posting',posting._id)"  *ngIf="posting.id_guru === _datas.id_guru">clear</i>
+                                <i class="tooltiptext">Hapus Posting</i>
+                            </span>
+                            <img [src]="foto[posting?._id]" class="boxImage"  *ngIf="user[posting._id]?.foto != null"/> 
+                            <label class="labelName">
+                                {{user[posting._id]?.nama}}
+                                <i>-post {{posting.waktu | date:'fullDate'}}  </i> 
+                                <span style="font-size: 10pt;color: grey;margin-left: 2%;">at : {{posting.waktu | date:'shortTime'}}</span>
+                            </label>
+                        </div>
+
+                        <div [innerHtml]="sanitizer.bypassSecurityTrustHtml(posting.posting)" class="inner" ></div>
+
+                        <div class="statusKomentar">
+                            <span style="margin-right: 30px;cursor: pointer">
+                                <img src="./assets/like3.png" alt="" style= "width: 18px;" (click)="updatePosting('Posting',posting)" *ngIf="posting.like.indexOf(_datas.id_guru) != -1 ">
+                                <img src="./assets/like.svg" alt="" style= "width: 18px;opacity: .4;" (click)="updatePosting('Posting',posting)" *ngIf="posting.like.indexOf(_datas.id_guru) < 0" >
+                                {{posting.like?.length}}
+                            </span>
+                            <span  (click)="commenShow = true; komentar.id_posting = posting._id" style="cursor: pointer">
+                                <i class="material-icons" style="position: relative;top: 5px;font-size: 13pt;">chat_bubble_outline</i>
+                                {{num[posting._id]}} komentar  
+                            </span>
+                        </div>
+
+                        <div class="divListKomentar" *ngIf="commenShow && komentar.id_posting === posting._id">
+                            <div *ngFor="let komen of listKomentar" [ngClass]="(addPost &&  post_id == komen._id) ? 'delPost':'addPost'">
+                                    <!-- [ngStyle]="{'transform': (addPost &&  post_id == komen._id) ? 'scaleY(0)':''}" -->
+                                <ng-container *ngIf="komen.id_posting === posting._id">
+                                    {{objectUser(komen)}}
+                                    <div style="float: left;margin-left: 4px;margin-top: 3px;margin-right: -50px;">
+                                        <img [src]="foto[komen._id]" class="boxImage"/> 
+                                        <label class="labelName" style="top: -25px;font-size: 11pt;">{{user[komen._id]?.nama}}</label> 
+                                    </div>
+                                    <!-- hapusPost('Komen',komen._id) -->
+                                    <span class="tooltip" style="float: right">
+                                        <i class="material-icons close" (click)="hapusPost('Komen',komen._id)" *ngIf="komen.id_guru === _datas.id_guru">clear</i>
+                                        <i class="tooltiptext">Hapus Komentar</i>
+                                    </span>
+                                    <span style="margin-right: 20px;cursor: pointer;position: absolute;top: 41px;right: 0px;">
+                                        <img src="./assets/like3.png" alt="" style= "width: 14px;" (click)="updatePosting('Komen',komen)" *ngIf="komen.like.indexOf(_datas.id_guru) != -1">
+                                        <img src="./assets/like.svg" alt="" style= "width: 14px;opacity: .4;" (click)="updatePosting('Komen',komen)" *ngIf="komen.like.indexOf(_datas.id_guru) < 0" >
+                                        <span style="    font-size: 11pt;margin-left: 10px;">{{komen.like?.length}}</span>
+                                    </span>
+                                    <i style="float: left;font-size: 10pt;margin-left: 65px;color: grey;margin-top: 6px;">at 12:00 am</i>
+                                
+                                    <div [innerHtml]="sanitizer.bypassSecurityTrustHtml(komen.komentar)" class="listKomentar"></div>
+                                </ng-container>
+                            </div>
+                        </div>
+
+                        <div class="boxKomen">
+                            <quill-editor [(ngModel)]="komentar[posting._id]" class= "quillStyle" [modules]= "{ toolbar: false }" placeholder="Tulis Komentar" ></quill-editor>
+                            <button class="tombol" style="color: black;    height: fit-content;" (click)="addKoment(posting._id);commenShow = true">Kirim</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- batas isi postingan -->
+        </div>
+    </div>
+
+

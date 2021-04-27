@@ -1,0 +1,132 @@
+.tableFixHead  {
+    overflow-y:auto; 
+    height: 720px; 
+    padding: 20px;
+}
+
+.pin{
+    position: fixed;
+    /* top: 100px; */
+    right: 0px;
+    z-index: 999;
+    left: 0;
+    width: 500px;
+    /* margin: 5% auto; */
+    bottom: 0px;
+    animation: pin 10000ms forwards;
+}
+
+.inputan{
+    border:0px !important;
+    color: rgba(255, 255, 255, 0.10196078431372549);
+    background: rgba(24, 24, 24, 0.33);
+}
+.inputan:focus{
+    box-shadow: 0px 0px 0px 0px !important;
+    border: 0px !important;
+    opacity: .3;
+}
+
+@keyframes pin{
+    0%{opacity: 0;}
+    100%{opacity: 1;}
+}
+
+.tableFixHead table{
+    padding: 20px;
+    color: rgba(255, 255, 255, 0.7294117647058823);
+    box-shadow: 0px 0px 10px 3px black;
+    border-collapse: collapse;
+    background: rgba(255, 255, 255, 0.2901960784313726);
+}
+
+.tableFixHead th, td {
+    border: 1px solid rgba(243, 243, 243, 0.09);
+    padding:5px;
+}
+
+.tableFixHead  th{
+    /* position: fixed; */
+    position: sticky; 
+    top: 40px;
+    background: rgb(36, 37, 39);
+    color: white;
+    border:0px;
+}
+.tableFixHead tr{
+    transition: all 500ms;
+}
+.tableFixHead tr:hover{
+    background: rgba(27, 26, 26, 0.21);
+
+}
+
+.bodyBox{
+    background: rgba(218, 218, 218, 0.12) !important;
+}
+
+.titleBox{
+    background: rgba(22, 95, 142, 0.13);
+    display: none;
+}
+.bodyBox input{
+    background: rgba(0, 0, 0, 0.2);
+    border: 0px;
+    color: rgba(255, 255, 255, 0.4117647058823529);
+}
+.bodyBox button{
+    opacity: 0.2;
+}
+
+.container{
+    padding: 0px;
+    position: fixed;
+    width: 100%;
+    left: 0px;
+    right:0px;
+    top: 0px;
+    margin: 0 auto;
+    height: 100vh;
+    /* background: rgba(29, 29, 29, 0.86); */
+    animation: content 5000ms forwards;
+}
+
+
+@keyframes content{
+    0%{background: black;}
+    100%{background: rgba(29, 29, 29, 0.86);}
+}
+
+.back{
+    padding: 0px;
+    position: fixed;
+    width: 100%;
+    left: 0px;
+    right:0px;
+    top: 0px;
+    margin: 0 auto;
+    height: 100vh;
+    background-image:url(/assets/hack.gif);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+.menu{
+    margin: 0 auto;
+    color: rgba(255, 255, 255, 0.34);
+    margin-top: 100px;
+    border: 0px;
+    border-collapse: inherit;
+    padding: 21px;
+    background: #0000001c;
+}
+
+.menu td{
+    border: 0px;
+}
+
+.menu input{
+    background: #ffffff05;
+    color: #ffffff70;
+    border: 1px solid #3c3c3c;
+}

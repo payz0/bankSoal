@@ -1,0 +1,108 @@
+<div class="container" *ngIf="_datas.dataGuru?.aktif == 'ya'; else nonaktif2">
+    <div class="user">
+        <h3>Soal Ujian</h3>
+        <ul>
+            <li *ngFor="let group of GroupSoal" class="folder" >
+                <img src="./assets/folder.jpg" alt="">    
+                <span class="textFolder" >{{group.namaGroup}} </span>
+                <div style="float: right" class="buttonEdit">
+                     <span class="tooltip" (click)="viewSoal(group,'word')">
+                        <img src="/assets/word.jpg" alt="">
+                        <span class="tooltiptext">Download Word</span>
+                     </span>
+                    <span (click)="konfirmasi = true; viewSoal(group)" class="tooltip">
+                        <i class="material-icons">visibility</i>    
+                        <span class="tooltiptext">Lihat Soal</span>
+                    </span>
+                    <span (click)="hapusGroup(group._id)" class="tooltip">
+                        <i class="material-icons">delete</i> 
+                        <span class="tooltiptext">Hapus Soal</span>
+                    </span>
+                </div>
+                <i class="detailSoal">{{group.list?.length}} Soal</i>
+                <i class="detailSoal" style="margin-right:30px">Di buat : {{group.tgl | date:'dd/M/yyyy'}}</i>
+            </li>
+        </ul>
+        <!-- <div [innerHtml]='docHtml'></div> -->
+    </div>
+</div>
+
+<ng-template #nonaktif2>
+    <div style="margin-top:100px;text-align: center;background: rgba(177, 183, 21, 0.3686274509803922);padding: 20px;">
+        <b>Maaf fitur ini belum tersedia</b> <br>
+        <i>{{_datas.dataGuru?.alasan}}</i>
+    </div>
+</ng-template>
+<!-- modal box -->
+<div class="latarBox" *ngIf="konfirmasi">
+    <div class="box" style="top:10px">
+        <div class="bodyBox">
+            <div class="titleBox">
+                Soal
+                <span class="btn-close" (click)="konfirmasi = false">&times;</span>
+            </div>
+            <div class="isiBox" style="max-height: 430px;" >
+                <b>Soal : <span *ngIf="!namaFolder"> {{objNama.namaGroup}} </span></b>
+                <span (click)="namaFolder = true" style="float: right; cursor: pointer;" class="tooltip">
+                    <i class="material-icons" style="font-size: 13pt; color:green;">border_color</i>
+                    <span class="tooltiptext">Edit nama soal</span> 
+                </span>
+                <input type="text" style="max-width:30%" (keyup.enter)="updateNama()"  [(ngModel)]="objNama.namaGroup"  *ngIf="namaFolder">
+                <ul style="list-style-type: decimal;" class="IsiSoal" >
+                    <li *ngFor="let soal of listSoal"class="soals">
+                        <p [innerHtml]="soal.isi" style="text-align: justify"></p>
+                        <hr>
+                        <ul style="list-style-type: lower-alpha; line-height: 1" class="opsiList">
+                            <li  *ngIf="soal.opsiA != null"><p [innerHtml]="soal.opsiA"></p></li>
+                            <li  *ngIf="soal.opsiA == null"><p>Tidak ada jawaban</p></li>
+                            <li *ngIf="soal.opsiB != null"><p [innerHtml]="soal.opsiB"></p></li>
+                            <li  *ngIf="soal.opsiB == null"><p>Tidak ada jawaban</p></li>
+                            <li *ngIf="soal.opsiC != null"><p  [innerHtml]="soal.opsiC"></p></li>
+                            <li  *ngIf="soal.opsiC == null"><p>Tidak ada jawaban</p></li>
+                            <li *ngIf="soal.opsiD != null"><p [innerHtml]="soal.opsiD"></p></li>
+                            <li  *ngIf="soal.opsiD == null"><p>Tidak ada jawaban</p></li>
+                        </ul>
+                    </li>
+                </ul>
+                <div style="float:right;">
+                    <button class="tombol tombol-alert" (click)="editGroup(objNama); this.objNama = {}">Ganti Soal</button>
+                    <button class="tombol tombol-alert"(click)="konfirmasi = false; getListSoal();updateNama()">Simpan Perubahan</button>
+                    <button class="tombol tombol-danger"(click)="konfirmasi = false;objNama = {};getListSoal()">Batal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- modal hapus -->
+    <ng-container *ngIf="peringatanHapus">
+            <div class="latarBox">
+              <div class="box" style="width: 25%; animation: box 200ms forwards">
+                  <div class="bodyBox" style="min-height: 120px;">
+                      <div class="titleBox" style="background: #a73a3a !important;">
+                          Peringatan !
+                          <span class="btn-close" (click)="peringatanHapus = false">&times;</span>
+                      </div>
+                      <div class="isiBox" style=" padding: 0px 20px;text-align: center">
+                            Yakin di  hapus
+                          <div style="text-align: center">
+                               
+                              <button class="tombol tombol-alert" (click)="peringatanHapus = false; yaHapus()" 
+                              style="padding: 5px 20px;
+                              font-size: 8pt;
+                              margin-top: 20px;">Ya</button>             
+                            <button class="tombol tombol-danger" (click)="peringatanHapus = false" 
+                            style="padding: 5px 20px;
+                            font-size: 8pt;
+                            margin-top: 20px;">
+                      
+                              <span>Batal</span>
+                            </button>  
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            </div>
+    </ng-container>

@@ -1,0 +1,157 @@
+<div class="backLatar">
+    <!-- <div class="latar"></div> -->
+    <div class="home">
+        <div class="headHome" (click)="tabel = false">
+            <span style="position: absolute; left: 37px;top: 0px;color: rgb(70, 181, 199); height: 100%;" *ngIf="rute === 'Login'" (click)="su()">0</span>
+            <a href="#" (click)="routeHome('Home')">Home</a>
+            <a href="#" (click)="routeHome('About')">Fasilitas</a>
+            <a href="#" (click)="routeHome('Contact')">About</a>
+            <a href="#" (click)="routeHome('Login')">Login</a>
+            <a href="#" (click)="routeHome('Daftar')">Daftar</a>
+        </div>
+        <h3 class="text3D">Bank Soal</h3>
+        <div class="contentHome">
+            <div class="sideLeft">
+                <h2><i>Kumpulkan Soal di BANK SOAL</i></h2>
+                <i>Media guru dan soal</i>
+                <div style="margin-top: 100px">
+                    <!-- <input type="text" placeholder="Kode Ujian"><br><br> -->
+                    <button class="tombol tombols " style="font-size: 20pt" (click)="loginTest()">Masuk Ujian</button>
+                </div>
+            </div>
+            <div  class="sideRight" >
+                <div [ngSwitch]="true" >
+                    <div class="rute" *ngSwitchCase="rute ==='Home'">
+                        <h2>Ayoo nabung soal !</h2>
+                        <p style="font-size: 14pt">
+                            Mengkoleksi berbagai macam soal, dari berbagai narasumber yang berasal dari latar belakang guru, pendidik, atau pengajar yang berada dalam
+                            sebuah lingkungan pendidikan, baik sekolah formal ataupun non formal. Dengan website ini di harapkan bisa membantu mempermudah dalam membuat
+                            soal, menganalisa bersama dalam forum, dan mengadakan kegiatan ujian online untuk peserta didik.
+                            
+                        </p>
+                        <span class="tombol tombols" style="background: rgb(35, 142, 139)" (click)="routeHome('Daftar')">Daftar Sekarang</span>
+                    </div>
+                    <div class="rute" *ngSwitchCase="rute ==='About'">
+                        <h2>Fasilitas</h2>
+                        <div class="bottom" style="font-size: 14pt;">
+                            <div class="box-Bottom">
+                                <span class="spanHead">
+                                    <i class="iconHead iconUjian"></i>
+                                    Soal Online
+                                </span>
+                                <span>
+                                    Soal yang terkumpul bisa di manfaatkan untuk bikin ujian online, yang di setting oleh guru sebagai admin
+                                </span>
+                            </div>
+                            <div class="box-Bottom">
+                                <span class="spanHead">
+                                    <i class="iconHead iconKoleksi"></i>
+                                    Koleksi Soal
+                                </span>
+                                 <span>
+                                    Koleksi soal dari berbagai sumber, dari semua anggota yang mendaftar, serta saling sharing publik dan ada juga yang bersifat privacy
+                                </span>
+                               
+                            </div>
+                            <div class="box-Bottom">
+                                
+                                <span class="spanHead">
+                                    <i class="iconHead iconForum"></i>
+                                    Diskusi Soal
+                                </span>
+                                 <span>
+                                    Terdapat forum diskusi guru sesuai bidang study masing masing, kegiatan yang mirip dengan kegiatan MGMP para guru. Di mana masing masing user 
+                                    bisa berdiskusi secara realtime,sepertihalnya media sosial khusus membahas soal atau seputar dunia pendidikkan.
+                                </span>
+                            </div>
+                            <div class="box-Bottom">
+                               
+                                <span class="spanHead"> 
+                                    <i class="iconHead iconSiswa"></i>
+                                    Siswa dan Nilai
+                                </span>
+                                 <span>
+                                    Setiap user memiliki daftar siswa dan daftar nilai hasil dari ujian online yang pernah di lakukan dengan website ini.
+                                </span>
+                            </div>
+                            <div class="box-Bottom">
+                                
+                                <span class="spanHead">
+                                    <i class="iconHead iconSoal"></i>
+                                    Pembuatan Soal</span>
+                                 <span>
+                                    Tentu juga setiap guru bisa membuat soal sendiri atau bisa menggunakan soal yang di buat oleh guru lain sebagai anggota dalam website ini.
+                                </span>
+                            </div>
+                            <div class="box-Bottom">
+                                
+                                    <span class="spanHead">
+                                        <i class="iconHead iconDownload"></i>
+                                        Download Soal</span>
+                                     <span>
+                                        Dari kumpulan soal, setiap user bisa mengoleksi soal versi mereka sendiri, sehingga menjadi sebuah soal yang siap di pakai dalam ujian.
+                                    </span>
+                                </div>
+                        </div>
+                    </div>
+                    <div class="rute" *ngSwitchCase="rute === 'Contact'">
+                        <h2>About</h2>
+                        <p style="text-align: justify;    font-size: 14pt;">
+                            Bank Soal ini di harapkan bisa mempermudah guru, atau pengajar untuk mengolah soal dan mengolah nilai, serta menganalisa kwalitas soal
+                            secara bersama sama. <br>
+                            Dari pengodingan backend sampai frontend, layout desain, sampai sewa server dan domain, website di buat secara sendirian tanpa team. 
+                            sekiranya website ini bermanfaat, dan bisa terus di kembangkan, maka di harapkan bisa membantu donasi untuk kelanjutan website ini.
+                        </p>
+                        <span style="font-size:11pt; float: right">email : kobbux@gmail.com</span>
+                        <i class="tombol tombols" style="background:rgb(17, 119, 93);float: left; padding: 6px 34px;font-size: 12pt !important" (click)="tabel = !tabel">Donasi</i>   
+                        <table width="100%" *ngIf="tabel" style="font-size: 11pt;">
+                            <tr><td>Email</td><td> : kobbu@gmail.com</td></tr>
+                            <tr><td>Phone </td><td> : 085249426xxx</td></tr>
+                            <tr><td>facebook </td><td> : xxxxx </td></tr>
+                            <tr><td>No. Rek. BNI</td><td> : xxxxx </td></tr>
+                        </table>
+                    </div>
+                    <div class="menuReg" [ngClass]="formLogin ? 'loginMenu':'regMenu'" *ngSwitchCase="rute === 'Login' || rute === 'Daftar'">
+                        <div *ngIf="!formLogin">
+                            <h3>Registrasi</h3>
+                            <input  type="text" placeholder="Nama Lengkap" class="inputan" [(ngModel)]="guru.nama" [ngClass]="((guru.nama == null || guru.nama == '') && errInput) ? 'errInput':''" >
+                            <input  type="text" placeholder="Username" class="inputan" [(ngModel)]="guru.username" (change)="cekValid('username')" [ngClass]="((guru.username == null || guru.username == '') && errInput) ? 'errInput':''" >
+                            <input  type="text" placeholder="Email" class="inputan" [(ngModel)]="guru.email" (change)="cekValid('email')" [ngClass]="((guru.email == null || guru.email == '') && errInput) ? 'errInput':''" >
+                            <input (keyup)="rubahSekolah($event)" (focusout)="outFocus()" type="text" 
+                            placeholder="Nama sekolah" class="inputan" [(ngModel)]="sekolah.namaSekolah" 
+                            [ngClass]="((sekolah.namaSekolah == null || sekolah.namaSekolah == '') && errInput) ? 'errInput':''" >
+                            <ng-container *ngIf="showSekolah">
+                                <ul>
+                                    <li *ngFor="let skull of allSekolah | filterBy:sekolah | slice:0:5 ; let i =index " (click)="sekolah = skull; editSekolah = true;">{{skull.namaSekolah}}</li>
+                                </ul>
+                            </ng-container>
+                            <input  type="password" placeholder="Password" class="inputan" [(ngModel)]="guru.password" [ngClass]="((guru.password == null || guru.password == '') && errInput) ? 'errInput':''" >
+                            <input  type="password" placeholder="Ulangi password" class="inputan" [(ngModel)]="repassword" (change)="rePass()" [ngClass]="((repassword == null || repassword == '') && errInput) ? 'errInput':''" >
+                            
+                            <button class="tombol tombol-danger" style="float: right"   (click)="routeHome('Home')">Batal</button>
+                            <button class="tombol tombol-primary" style="float: right" (click)="daftar()">Daftar!</button>
+                            <a href="#" (click)="formLogin = true; guru = {}; errInput = false">Login Sekarang</a>
+                        </div>
+                        <div *ngIf="formLogin">
+                            <ng-container *ngIf="!email">
+                                <h3>Login</h3>
+                                <input  (keyup.enter)="masuk()" type="text" class="inputan" placeholder="Username atau email" [(ngModel)]="guru.email" (change)="cekValid()" [ngClass]="(guru.email == null && errInput) ? 'errInput':''">
+                                <input  (keyup.enter)="masuk()" type="password" class="inputan" placeholder="Password" [(ngModel)]="guru.password"  (change)="cekValid()" [ngClass]="(guru.password == null && errInput) ? 'errInput':''">
+                                <button class="tombol tombol-primary" (click)="masuk()">Login</button>
+                                <button class="tombol tombol-danger"  (click)="routeHome('Home')">Batal</button>
+                                <a href="#" (click)="email = true; guru = {}; errInput = false" style="float: right">Lupa password ?</a>
+                            </ng-container>
+                            <ng-container  *ngIf="email">
+                                <h3>Lupa password ...?</h3>
+                                <input  (keyup.enter)="masuk()" type="text" class="inputan" placeholder="Email Anda" [(ngModel)]="guru.email" [ngClass]="errInput ? 'errInput':''">
+                                <button class="tombol tombol-primary" (click)="kirimEmail()">Kirim email</button>
+                                <a href="#" (click)="guru = {}; errInput = false; email = false"  style="float: right">Kembali login</a>
+                            </ng-container>
+                            <!-- <a href="#" (click)="formLogin = false; guru = {}; errInput = false" style="float: right">Belum daftar</a> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

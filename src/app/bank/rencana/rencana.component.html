@@ -1,0 +1,182 @@
+<div class="container" *ngIf="_datas.dataGuru?.aktif == 'ya'; else nonaktif2">
+    <div class="user">
+        <h3>Config Ujian Online</h3>
+        <button class="tombol tombol-alert" (click)="konfirmasi = true;editView = false; getPreview = false">Buat Rencana Ujian</button>
+        <ul class="ulGroup" >
+            <li *ngFor="let ulangan of allUjian;let i= index" class="listGroup" cdkDrag [ngStyle]="ulangan.use > 0 ? {'background':'rgb(212, 212, 212)'} :{}">
+                <i [ngClass]="ulangan.use > 0 ? 'used':'new'">
+                    <span *ngIf="ulangan.use > 0">used {{ulangan.use}}</span>
+                    <span *ngIf="ulangan.use === undefined">New</span>
+                </i>
+                <p style="font-size: 10pt;margin-bottom: 15px;margin-top: -5px;">
+                    <b style="font-size: 14pt;">{{ulangan.ujian}}</b> <br>
+                     [ {{ulangan.id_siswa.length}} siswa, {{ulangan.id_kelas.length}} kelas]
+                </p>
+                <b *ngFor="let study of allMapel">
+                   <ng-container *ngIf="study._id == ulangan.id_mapel">{{study.mapel}}</ng-container> 
+                </b>
+                <div style="background: rgba(185, 185, 185, 0.38);
+                padding: 6px;
+                position: relative;
+                font-size: 18pt;
+                border: 1px solid rgba(204, 204, 204, 0.91);" (click)="kode(ulangan)">
+                    <b>{{ulangan.kode}}</b>
+                </div>
+                <div style="height: 3px;">
+                    <span [ngStyle]="style[ulangan._id]" style="height: 3px;" *ngIf="playUjian[ulangan._id]"></span>
+                </div>
+                <div class="tombolMenu"> 
+                    <span class="tooltip" *ngIf="playUjian[ulangan._id]">
+                        <i class="material-icons" style="color: red" (click)="pause(ulangan)">pause</i>
+                        <span class="tooltiptext">Stop</span>
+                    </span>
+                    <span class="tooltip" *ngIf="!playUjian[ulangan._id]">
+                        <i class="material-icons" style="color: blue;" (click)="play(ulangan)">play_arrow</i>
+                        <span class="tooltiptext">Mulai Ujian</span>
+                    </span>
+                    <span class="tooltip">
+                        <i class="material-icons" style="color: grey" *ngIf="ulangan.status === 'start'">border_color</i>
+                        <i class="material-icons" (click)="edit(ulangan);editView = true;kelas=ulangan.id_kelas" *ngIf="ulangan.status != 'start'">border_color</i>
+                        <span class="tooltiptext">Edit Ujian</span>
+                    </span>
+                    <span class="tooltip">
+                        <i class="material-icons" (click)="preview(ulangan)">visibility</i>
+                        <span class="tooltiptext">Preview</span>
+                    </span>
+                    <span class="tooltip" >
+                        <i class="material-icons" style="color: grey" *ngIf="ulangan.status === 'start'">delete</i> 
+                        <i class="material-icons" (click)="hapusUjian(ulangan)" *ngIf="ulangan.status != 'start'">delete</i> 
+                        <span class="tooltiptext">Hapus Soal</span>
+                    </span>
+                </div>
+            </li>
+        </ul>
+
+    </div>
+</div>
+
+<ng-template #nonaktif2>
+    <div style="margin-top:100px;text-align: center;background: rgba(177, 183, 21, 0.3686274509803922);padding: 20px;">
+        <b>Maaf fitur ini belum tersedia</b> <br>
+        <i>{{_datas.dataGuru?.alasan}}</i>
+    </div>
+</ng-template>
+
+<!-- modal box -->
+<div class="latarBox" *ngIf="konfirmasi">
+    <div class="box">
+        <div class="bodyBox">
+            <div class="titleBox">
+                Config Ujian
+                <span class="btn-close" (click)="konfirmasi = false">&times;</span>
+            </div>
+            <div class="isiBox">
+                <div class="edit" *ngIf="!getPreview ; else showPreview">
+                        <div style="display: grid;grid-template-columns: auto 20%;">
+                            <div style="padding-right: 10px">
+                                Nama ujian
+                                <input type="text" placeholder="Nama ujian" class="inputan" [(ngModel)]="ujian.ujian" #cekUjian id="Nama Ujian">
+                            </div>
+                            <div style="padding-left: 10px">
+                                Durasi
+                                <input type="number" class="inputan" placeholder="menit" [(ngModel)]="ujian.durasi"  #cekUjian id="Durasi">
+                            </div>
+                        </div>
+                        <b>Mata Pelajaran :</b>
+                            <select class="inputan" style="text-transform: uppercase;"  [(ngModel)]="ujian.id_mapel"  #cekUjian id="Mata Pelajaran" [disabled]="ujian.use > 0 ? true : false">
+                                <option value="" selected>- Pilih -</option>
+                                <option *ngFor="let id of listMapel" value="{{id}}">
+                                    <ng-container *ngFor ="let mapel of allMapel">
+                                        <span *ngIf="id == mapel._id">{{mapel.mapel}}</span>
+                                    </ng-container>
+                                </option>
+                            </select>
+                        <b>Tahun Ajaran :</b>
+                        <select  class="inputan" style="text-transform: uppercase;" [(ngModel)]="ujian.thn_ajaran"  #cekUjian id="Tahun Ajaran">
+                            <option value="" selected>- Pilih -</option>
+                            <option *ngFor="let thn of tahun" value="{{thn.tahun}}">{{thn.tahun}}</option>
+                        </select>
+                        <b>Koleksi Soal:</b>
+                        <select  class="inputan" style="text-transform: uppercase;" [(ngModel)]="ujian.id_soal"  #cekUjian id="Koleksi soal" [disabled]="ujian.use > 0 ? true : false">
+                            <option *ngFor="let mapel of allGroup" value="{{mapel._id}}">{{mapel.namaGroup}} </option>
+                        </select>
+                        <b>Pilih peserta ujian:</b>
+                        <div style="height: 200px;overflow: auto;">
+                            <ul style="list-style: none;margin-left: -40px; display: flex;flex-wrap: wrap;">
+                                <li *ngFor="let kelas of allKelas;let n = index" style="margin:10px;background: white;padding: 4px;border-radius: 5px;" >
+                                    <input type="checkbox" id="{{kelas._id}}" (change)="allPeserta($event)" *ngIf="!editView">
+                                    <input type="checkbox" id="{{kelas._id}}" (change)="allPeserta($event)" [checked]="ujian.id_kelas.indexOf(kelas._id) > -1 ? true:false" *ngIf="editView">
+                                    <label for="{{kelas._id}}" style="padding:20px;cursor: pointer;">{{kelas.kelas}}</label>
+                                </li>
+                            </ul>
+                        </div>
+                        <div style="text-align:center">
+                            <button class="tombol tombol-alert"  (click)="update('full');konfirmasi = false;" *ngIf="editView">Simpan Perubahan</button>
+                            <button class="tombol tombol-alert"  (click)="simpan()" *ngIf="!editView">Simpan</button>
+                            <button class="tombol tombol-danger"  (click)="konfirmasi = false;kelas = [];ujian={}">Batal</button>
+                        </div>         
+                </div>
+                <ng-template #showPreview>
+                    <div class="preview">
+                        <b style="border-bottom: 1px solid;display: block;">Siswa online  
+                            <span style="float: right">{{ujian.jum}} dari {{peserta.length}}</span>
+                        </b>
+                        <ol>
+                            <li *ngFor="let siswa of peserta">
+
+                                <span [ngClass]="(siswa.status == 'login' && siswa.kode_ujian === ujian._id) ? 'listPeserta':''">{{siswa.Nama}} </span>
+
+                                <span>
+                                     <i class="material-icons" *ngIf="siswa.status == 'login' && siswa.kode_ujian === ujian._id" style="font-size: 14pt;color: green;justify-self: end;">done</i>
+                                </span>    
+                               
+                                 <ng-container *ngFor="let kelas of allKelas">
+                                    <span *ngIf="siswa.id_kelas === kelas._id" style="margin-right:20px;justify-self: end;">[ {{kelas.kelas}} ]</span>
+                                </ng-container>
+
+                                <span class="tooltip" style="right: 10px; cursor: pointer; justify-self: end;" *ngIf="siswa.status == 'login'  && siswa.kode_ujian === ujian._id" >
+                                    <i class="material-icons " style="font-size: 12pt;color: red;" (click)="exitSiswa(siswa)">	close</i>
+                                    <span class="tooltiptext">Logout</span>
+                                </span>
+                            </li>
+                        </ol>
+                        <div style="text-align: right">
+                            <button class="tombol tombol-danger"  (click)="konfirmasi = false;kelas = [];ujian={};getPreview = false">Ok</button>
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</div>
+
+ <!-- modal hapus -->
+ <ng-container *ngIf="peringatanHapus">
+        <div class="latarBox">
+          <div class="box" style="width: 25%; animation: box 200ms forwards">
+              <div class="bodyBox" style="min-height: 120px;">
+                  <div class="titleBox" style="background: #a73a3a !important;">
+                      Peringatan !
+                      <span class="btn-close" (click)="peringatanHapus = false">&times;</span>
+                  </div>
+                  <div class="isiBox" style=" padding: 0px 20px;text-align: center">
+                        Yakin di  hapus
+                      <div style="text-align: center">
+                           
+                          <button class="tombol tombol-alert" (click)="peringatanHapus = false; yaHapus()" 
+                          style="padding: 5px 20px;
+                          font-size: 8pt;
+                          margin-top: 20px;">Ya</button>             
+                        <button class="tombol tombol-danger" (click)="peringatanHapus = false" 
+                        style="padding: 5px 20px;
+                        font-size: 8pt;
+                        margin-top: 20px;">
+                  
+                          <span>Batal</span>
+                        </button>  
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+</ng-container>

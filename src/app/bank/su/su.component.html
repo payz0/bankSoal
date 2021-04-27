@@ -1,0 +1,95 @@
+<div class="back">
+    <div class="container">
+        <div style="padding: 20px 100px" *ngIf=!super>
+            <div class="pin">
+                <input type="password"  [(ngModel)]="pin" (keyup.enter)="log()" class="inputan">
+            </div>
+        </div>
+        
+        
+        <div class="tableFixHead"  *ngIf="super && !menu">
+            <input type="text" class="inputan" placeholder="cari" 
+            style="position: sticky;top:0px;
+            background: rgba(255, 255, 255, 0.058823529411764705);
+            border: 1px solid;
+            color: rgba(255, 255, 255, 0.4);" [(ngModel)]="users.nama" >
+            <table width="99.9%">
+                <tr>
+                    <th>No</th>
+                    <th>Nama</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Sekolah</th>
+                    <th>Registrasi</th>
+                    <th>Argumen</th>
+                    <th (click)="menu = !menu">Status</th>
+                    <th>Action</th>
+                </tr>
+                <tbody>
+                    <tr *ngFor="let user of allUser|filterBy:users; let i = index">
+                        <td>{{i+1}}</td>
+                        <td>{{user.nama}}</td>
+                        <td>{{user.username}}</td>
+                        <td>{{user.email}}</td>
+                        <td>{{user.sekolah}}</td>
+                        <td>{{user.tgl_reg | date :'d, MMM y, h:mm:ss a'}}</td>
+                        <td><span *ngIf="user.aktif == 'tidak'">{{user.alasan}}</span></td>
+                        <td>
+                            <button class="tombol tombol-danger" (click)="aktif(user)" *ngIf="user.aktif == 'ya'">aktif</button>
+                            <button class="tombol tombol-secondary" (click)="aktif(user)" *ngIf="user.aktif == 'tidak'">nonaktif</button>
+                        </td>
+                        <td>
+                            <i class="material-icons" style="color: rgb(175, 4, 4);cursor: pointer;" (click)="del(user._id)">delete</i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div *ngIf="super && menu" class="menu" (dblclick)="menu = false">
+            <table width="40%" style="margin: 0 auto;" >
+                <tr>
+                    <td>Password</td>
+                    <td><input type="password" class="inputan" [(ngModel)]="datUser.asli" (change)="cekPass($event)"></td>
+                </tr>
+                <tr *ngIf="password">
+                    <td>Password baru</td>
+                    <td><input type="password" class="inputan" [(ngModel)]="datUser.new1" (change)="cocok()"></td>
+                </tr>
+                <tr *ngIf="password">
+                    <td>Password ulang</td>
+                    <td><input type="password" class="inputan" [(ngModel)]="datUser.new2" (change)="cocok()"></td>
+                </tr>
+                <tr *ngIf="password">
+                    <td>Confirm</td>
+                    <td>
+                        <input type="radio" name="aktif" value="ya" [(ngModel)]="datUser.konfirm">Ya
+                        <input type="radio" name="aktif" value="tidak" [(ngModel)]="datUser.konfirm">Tidak
+                    </td>
+                </tr>
+                <tr *ngIf="password">
+                    <td colspan="2">
+                        <button class="tombol tombol-primary" style="float: right;opacity: 0.3;
+                        background: black;" (click)="simpan();menu = false">save</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- modal box -->
+<div class="latarBox" *ngIf="konfirmasi">
+    <div class="box">
+        <div class="bodyBox">
+            <div class="titleBox">
+                Alasan
+                <span class="btn-close" (click)="konfirmasi = false">&times;</span>
+            </div>
+            <div class="isiBox">
+                <input type="text" class="inputan" placeholder="argumen" [(ngModel)]="objUser.alasan">
+                <button class="tombol tombol-danger" style="float:right;margin:20px 1px 20px 1px;" (click)="konfirmasi = false; objUser.aktif = 'ya'">Batal </button>
+                <button class="tombol tombol-alert" style="float:right;margin:20px 1px 20px 1px;" (click)="simpanUser()">Simpan </button>
+            </div>
+        </div>
+    </div>
+</div>

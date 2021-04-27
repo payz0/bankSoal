@@ -1,0 +1,75 @@
+.container{
+    padding-top: 90px !important;
+}
+.listSoal{
+    padding: 1px 10px;
+    background: rgba(239, 239, 239, 0.75);
+    border-radius: 5px;
+    margin-bottom: 5px;
+    width: 95%;
+}
+.listSoal label{
+    cursor: pointer;
+    display: block;
+    margin-bottom: -10px;
+    border-radius: 10px;
+    transition: all 400ms;
+    margin-top: -5px;
+}
+.listSoal label:hover{
+    background: white;
+}
+.listSoal p{
+    text-transform: capitalize;
+}
+
+input[type=radio]{
+    display: none;
+}
+
+input:checked + label{
+    background: rgba(84, 206, 197, 0.23);
+    padding: 0px 20px;
+    width: fit-content;
+}
+
+tr{
+    line-height: 3;
+}
+
+td{
+    border-bottom: 1px dotted black;
+}
+
+.internet{
+    position: absolute;
+    right: 75px;
+    background: #65ada8;
+    padding: 5px 11px 5px 29px;
+    color: white;
+    border-radius: 15px;
+    z-index: 9;
+}
+.konek{
+    width: 20px;
+    height: 20px;
+    background: red;
+    position: absolute;
+    border-radius: 50%;
+    right: 60px; 
+    /* 60px */
+    animation: conek 500ms infinite;
+}
+.non-konek{
+    width: 20px;
+    height: 20px;
+    background: grey;
+    position: absolute;
+    border-radius: 50%;
+    right: 60px
+}
+@keyframes conek {
+    0%{ background:yellow}
+    50%{background: crimson}
+    100%{background: yellow;}
+}

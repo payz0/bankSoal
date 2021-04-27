@@ -1,0 +1,112 @@
+<div class="container" >
+        <!-- (keyup.escape)="listMapel = false" (click)="listMapel = false" -->
+    <div class="user">
+        <h3>Profil</h3>
+        <table style="width: 100%">
+            <tr>
+                <td class="labelProfil">Nama</td>
+                <td >:</td>
+                <td>
+                    <input type="text" class="inputan" placeholder="Nama anda" [(ngModel)]="guru.nama">
+                </td>
+            </tr>
+            <tr>
+                <td class="labelProfil">Username</td>
+                <td>:</td>
+                <td>
+                    <input type="text" class="inputan" placeholder="Username anda" [(ngModel)]="guru.username" [disabled]="true">
+                </td>
+            </tr>
+            <tr>
+                <td class="labelProfil">Password</td>
+                <td>:</td>
+                <td>
+                    <input type="password" class="inputan" placeholder="Password anda" [(ngModel)]="guru.password" >
+                </td>
+            </tr>
+            <tr>
+                <td class="labelProfil">Sekolah</td>
+                <td>:</td>
+                <td>
+                    <input type="text" class="inputan" placeholder="Sekolah anda" [(ngModel)]="guru.sekolah">
+                </td>
+            </tr>
+            <tr>
+                <td class="labelProfil">Provinsi</td>
+                <td>:</td>
+                <td>
+                    <input type="text" class="inputan" placeholder="Provinsi Sekolah" [(ngModel)]="guru.provinsi">
+                </td>
+            </tr>
+            <tr>
+                <td class="labelProfil">Kabupaten</td>
+                <td>:</td>
+                <td>
+                    <input type="text" class="inputan" placeholder="Kabupaten Sekolah" [(ngModel)]="guru.kabupaten">
+                </td>
+            </tr>
+            <tr>
+                <td class="labelProfil">Kecamatan</td>
+                <td>:</td>
+                <td>
+                    <input type="text" class="inputan" placeholder="Kecamatan Sekolah" [(ngModel)]="guru.kecamatan">
+                </td>
+            </tr>
+            <tr>
+                <td class="labelProfil">Alamat Sekolah</td>
+                <td>:</td>
+                <td>
+                    <input type="text" class="inputan" placeholder="Alamat Sekolah anda" [(ngModel)]="guru.alamat">
+                </td>
+            </tr>
+            <tr>
+                <td class="labelProfil">Email</td>
+                <td>:</td>
+                <td>
+                    <input type="text" class="inputan" placeholder="Email anda" [(ngModel)]="guru.email" [disabled]="true">
+                </td>
+            </tr>
+            <tr>
+                <td class="labelProfil">Bidang Study</td>
+                <td >:</td>
+                <td>
+                    <div>
+                        <div style="display: flex;flex-direction: row;" (focusout)="listMapel = false">
+                            <input class="inputan" type="text" placeholder='Tulis bidang study lalu tekan tombol enter' 
+                            [(ngModel)]="mapel.mapel" (keyup.enter)="tambahMapel()" *ngIf="listMapel" >
+                            <button class="tombol tombol-danger" style="position: relative;top: -4px;" (click)="tambahMapel()"  *ngIf="listMapel">+Tambah</button>
+                        </div>
+                        <select class="inputan" (change)="addMapel($event)" *ngIf="!listMapel">
+                            <option value="">-- Pilih Bidang Study --</option>
+                            <option value="{{study._id}}" *ngFor="let study of allMapel " >{{study.mapel}}</option>
+                            <option value="null">( Klik Bidang Study Baru )</option>
+                        </select>
+                    </div>
+                    <ul class="formMapel">
+                        <li *ngFor="let study of guru.id_mapel" > 
+                            <ng-container *ngFor="let id of allMapel">
+                                <span *ngIf="id._id === study">{{id.mapel}}</span>
+                            </ng-container>
+                            <i class="material-icons" 
+                            style="font-size: 14pt;
+                            cursor: pointer;
+                            margin-left: 12px;
+                            float: right;" (click)="hapusMapel(study)">cancel</i>
+                        </li>
+                        <li *ngIf="guru.id_mapel?.length === 0">Tidak ada mapel</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td class="labelProfil" style="height: 50px;"> 
+                    <input type="file" id='upload' (change)="upload($event)" style="display: none"> 
+                    <label class="labelFoto" for='upload'  [ngStyle]="{ 'background-image': 'url('+fotoProfil+')'}" *ngIf="fotoProfil != undefined">Profil Image</label>
+                </td>
+                <td></td>
+                <td>
+                </td>
+            </tr>
+        </table>
+        <button (click)="simpan()" class="tombol tombol-alert" style="float: right">Update Profil</button>
+    </div>
+</div>
