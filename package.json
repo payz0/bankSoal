@@ -1,0 +1,23 @@
+{
+  "name": "bankSoal",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "excel4node": "^1.7.2",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.1.6-alpha.5",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.7.1",
+    "nodemailer": "^6.4.2",
+    "sharp": "^0.23.2",
+    "socket.io": "^2.3.0"
+  }
+}
